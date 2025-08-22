@@ -1,0 +1,126 @@
+{
+  "extensionName": {
+    "message": "MyLinks Extension",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Manage your bookmarks with MyLinks collections",
+    "description": "Description of the extension"
+  },
+  "initialize": {
+    "message": "Initialize",
+    "description": "Initialize button text"
+  },
+  "initialization": {
+    "message": "Initialization",
+    "description": "Initialization title"
+  },
+  "initializationDescription": {
+    "message": "Welcome to MyLinks Extension! This will backup your current bookmarks and set up the extension.",
+    "description": "Initialization description"
+  },
+  "backupCreated": {
+    "message": "Backup created successfully",
+    "description": "Backup success message"
+  },
+  "settings": {
+    "message": "Settings",
+    "description": "Settings title"
+  },
+  "mylinksUrl": {
+    "message": "MyLinks URL",
+    "description": "MyLinks URL field label"
+  },
+  "apiKey": {
+    "message": "API Key",
+    "description": "API Key field label"
+  },
+  "getApiKey": {
+    "message": "Get API Key",
+    "description": "Get API Key button text"
+  },
+  "save": {
+    "message": "Save",
+    "description": "Save button text"
+  },
+  "collections": {
+    "message": "Collections",
+    "description": "Collections title"
+  },
+  "createCollection": {
+    "message": "Create Collection",
+    "description": "Create collection button text"
+  },
+  "editCollection": {
+    "message": "Edit Collection",
+    "description": "Edit collection button text"
+  },
+  "deleteCollection": {
+    "message": "Delete Collection",
+    "description": "Delete collection button text"
+  },
+  "collectionName": {
+    "message": "Collection Name",
+    "description": "Collection name field label"
+  },
+  "collectionNamePlaceholder": {
+    "message": "Enter collection name",
+    "description": "Collection name field placeholder"
+  },
+  "collectionDescription": {
+    "message": "Collection Description",
+    "description": "Collection description field label"
+  },
+  "collectionDescriptionPlaceholder": {
+    "message": "Enter collection description (optional)",
+    "description": "Collection description field placeholder"
+  },
+  "collectionVisibility": {
+    "message": "Collection Visibility",
+    "description": "Collection visibility field label"
+  },
+  "public": {
+    "message": "Public",
+    "description": "Public collection visibility"
+  },
+  "private": {
+    "message": "Private",
+    "description": "Private collection visibility"
+  },
+  "addToCollection": {
+    "message": "Add to Collection",
+    "description": "Add to collection context menu"
+  },
+  "linkAdded": {
+    "message": "Link added successfully",
+    "description": "Link added success message"
+  },
+  "error": {
+    "message": "Error",
+    "description": "Error title"
+  },
+  "invalidApiKey": {
+    "message": "Invalid API key. Please check your settings.",
+    "description": "Invalid API key error message"
+  },
+  "networkError": {
+    "message": "Network error. Please check your connection.",
+    "description": "Network error message"
+  },
+  "loading": {
+    "message": "Loading...",
+    "description": "Loading text"
+  },
+  "cancel": {
+    "message": "Cancel",
+    "description": "Cancel button text"
+  },
+  "confirm": {
+    "message": "Confirm",
+    "description": "Confirm button text"
+  },
+  "deleteConfirmation": {
+    "message": "Are you sure you want to delete this collection?",
+    "description": "Delete confirmation message"
+  }
+}

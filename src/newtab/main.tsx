@@ -1,8 +1,7 @@
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { ModalsProvider } from "@mantine/modals";
 import { createRoot } from "react-dom/client";
-import { PopupApp } from "./app/popup_app";
+import { NewTabApp } from "./NewTabApp";
 
 const container = document.getElementById("root");
 if (container) {
@@ -10,9 +9,7 @@ if (container) {
 
   root.render(
     <MantineProvider>
-      <ModalsProvider>
-        <PopupApp />
-      </ModalsProvider>
+      <NewTabApp />
     </MantineProvider>
   );
 }

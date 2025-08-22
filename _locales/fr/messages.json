@@ -1,0 +1,126 @@
+{
+  "extensionName": {
+    "message": "Extension MyLinks",
+    "description": "Nom de l'extension"
+  },
+  "extensionDescription": {
+    "message": "Gérez vos favoris avec les collections MyLinks",
+    "description": "Description de l'extension"
+  },
+  "initialize": {
+    "message": "Initialiser",
+    "description": "Texte du bouton d'initialisation"
+  },
+  "initialization": {
+    "message": "Initialisation",
+    "description": "Titre d'initialisation"
+  },
+  "initializationDescription": {
+    "message": "Bienvenue dans l'extension MyLinks ! Cela va sauvegarder vos favoris actuels et configurer l'extension.",
+    "description": "Description d'initialisation"
+  },
+  "backupCreated": {
+    "message": "Sauvegarde créée avec succès",
+    "description": "Message de succès de sauvegarde"
+  },
+  "settings": {
+    "message": "Paramètres",
+    "description": "Titre des paramètres"
+  },
+  "mylinksUrl": {
+    "message": "URL MyLinks",
+    "description": "Label du champ URL MyLinks"
+  },
+  "apiKey": {
+    "message": "Clé API",
+    "description": "Label du champ clé API"
+  },
+  "getApiKey": {
+    "message": "Obtenir la clé API",
+    "description": "Texte du bouton obtenir la clé API"
+  },
+  "save": {
+    "message": "Enregistrer",
+    "description": "Texte du bouton enregistrer"
+  },
+  "collections": {
+    "message": "Collections",
+    "description": "Titre des collections"
+  },
+  "createCollection": {
+    "message": "Créer une collection",
+    "description": "Texte du bouton créer une collection"
+  },
+  "editCollection": {
+    "message": "Modifier la collection",
+    "description": "Texte du bouton modifier la collection"
+  },
+  "deleteCollection": {
+    "message": "Supprimer la collection",
+    "description": "Texte du bouton supprimer la collection"
+  },
+  "collectionName": {
+    "message": "Nom de la collection",
+    "description": "Label du champ nom de collection"
+  },
+  "collectionNamePlaceholder": {
+    "message": "Entrer le nom de la collection",
+    "description": "Placeholder du champ nom de collection"
+  },
+  "collectionDescription": {
+    "message": "Description de la collection",
+    "description": "Label du champ description de collection"
+  },
+  "collectionDescriptionPlaceholder": {
+    "message": "Entrer la description de la collection (optionnel)",
+    "description": "Placeholder du champ description de collection"
+  },
+  "collectionVisibility": {
+    "message": "Visibilité de la collection",
+    "description": "Label du champ visibilité de collection"
+  },
+  "public": {
+    "message": "Public",
+    "description": "Visibilité publique de la collection"
+  },
+  "private": {
+    "message": "Privé",
+    "description": "Visibilité privée de la collection"
+  },
+  "addToCollection": {
+    "message": "Ajouter à la collection",
+    "description": "Menu contextuel ajouter à la collection"
+  },
+  "linkAdded": {
+    "message": "Lien ajouté avec succès",
+    "description": "Message de succès d'ajout de lien"
+  },
+  "error": {
+    "message": "Erreur",
+    "description": "Titre d'erreur"
+  },
+  "invalidApiKey": {
+    "message": "Clé API invalide. Veuillez vérifier vos paramètres.",
+    "description": "Message d'erreur de clé API invalide"
+  },
+  "networkError": {
+    "message": "Erreur réseau. Veuillez vérifier votre connexion.",
+    "description": "Message d'erreur réseau"
+  },
+  "loading": {
+    "message": "Chargement...",
+    "description": "Texte de chargement"
+  },
+  "cancel": {
+    "message": "Annuler",
+    "description": "Texte du bouton annuler"
+  },
+  "confirm": {
+    "message": "Confirmer",
+    "description": "Texte du bouton confirmer"
+  },
+  "deleteConfirmation": {
+    "message": "Êtes-vous sûr de vouloir supprimer cette collection ?",
+    "description": "Message de confirmation de suppression"
+  }
+}
