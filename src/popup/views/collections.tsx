@@ -3,7 +3,6 @@ import {
   CreateCollectionRequest,
   MyLinksCollection,
   UpdateCollectionRequest,
-  Visibility,
 } from "@/types";
 import {
   ActionIcon,
@@ -44,50 +43,19 @@ export function CollectionsView({
   const [loading, setLoading] = useState(false);
   const modals = useModals();
 
-  const handleCreateCollection = async ({
-    name,
-    visibility,
-    description,
-  }: {
-    name: string;
-    visibility: Visibility;
-    description?: string;
-  }) => {
-    if (!visibility) {
-      visibility = Visibility.PRIVATE;
-    }
-
+  const handleCreateCollection = async (props: CreateCollectionRequest) => {
     try {
       setLoading(true);
-      await onCreateCollection({
-        name,
-        visibility: visibility || Visibility.PRIVATE,
-        description,
-      });
+      await onCreateCollection(props);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleUpdateCollection = async ({
-    id,
-    name,
-    visibility,
-    description,
-  }: {
-    id: string;
-    name: string;
-    visibility: Visibility;
-    description?: string;
-  }) => {
+  const handleUpdateCollection = async (props: UpdateCollectionRequest) => {
     try {
       setLoading(true);
-      await onUpdateCollection({
-        id,
-        name,
-        visibility: visibility || "private",
-        description,
-      });
+      await onUpdateCollection(props);
     } finally {
       setLoading(false);
     }

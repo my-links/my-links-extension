@@ -28,41 +28,40 @@ export type MyLinksLink = {
 };
 
 // Settings and configuration
-export interface ExtensionSettings {
+export type ExtensionSettings = {
   mylinksUrl: string;
   apiKey: string;
   isInitialized: boolean;
   lastSync: string;
-}
+};
 
 // Storage types
-export interface StorageData {
+export type StorageData = {
   settings: ExtensionSettings;
   collections: MyLinksCollection[];
   cache: CacheData;
-}
+};
 
-export interface CacheData {
+export type CacheData = {
   collections: MyLinksCollection[];
   lastSync: string;
-}
+};
 
 // API types
-export interface ApiResponse<T> {
+export type ApiResponse<T> = {
   data: T;
   success: boolean;
   message?: string;
-}
+};
 
-export interface TokenCheckResponse {
+export type TokenCheckResponse = {
   valid: boolean;
   message?: string;
-}
+};
 
 // Request types
-export type CreateCollectionRequest = Omit<
-  MyLinksCollection,
-  "id" | "createdAt" | "updatedAt" | "links"
+export type CreateCollectionRequest = Partial<
+  Omit<MyLinksCollection, "id" | "createdAt" | "updatedAt" | "links">
 >;
 
 export type UpdateCollectionRequest = Omit<
@@ -76,11 +75,11 @@ export type AddLinkRequest = Omit<
 >;
 
 // Context menu types
-export interface ContextMenuInfo {
+export type ContextMenuInfo = {
   pageUrl: string;
   pageTitle: string;
   selectionText?: string;
-}
+};
 
 // Message types for background communication
 export type MessageType =
@@ -95,37 +94,37 @@ export type MessageType =
   | "UPDATE_SETTINGS"
   | "RESET_EXTENSION";
 
-export interface Message {
+export type Message = {
   type: MessageType;
   [key: string]: any;
-}
+};
 
 // UI state types
-export interface PopupState {
+export type PopupState = {
   settings: ExtensionSettings | null;
   collections: MyLinksCollection[];
   loading: boolean;
   error: string | null;
   pendingLink: PendingLink | null;
-}
+};
 
-export interface PendingLink {
+export type PendingLink = {
   url: string;
   name: string;
-}
+};
 
 // Error types
-export interface AppError {
+export type AppError = {
   code: string;
   message: string;
   details?: any;
-}
+};
 
 // Notification types
-export interface Notification {
+export type Notification = {
   id: string;
   title: string;
   message: string;
   type: "success" | "error" | "warning" | "info";
   timestamp: number;
-}
+};

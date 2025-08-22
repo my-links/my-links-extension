@@ -46,7 +46,7 @@ export class MessagingService {
   }
 
   static async updateSettings(
-    settings: ExtensionSettings
+    settings: Partial<ExtensionSettings>
   ): Promise<MessageResponse> {
     return this.sendMessage({
       type: "UPDATE_SETTINGS",

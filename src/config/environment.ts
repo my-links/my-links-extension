@@ -1,9 +1,9 @@
 // Environment configuration
 export const ENV = {
-  NODE_ENV: process.env.NODE_ENV || "development",
-  IS_DEV: process.env.NODE_ENV === "development",
-  IS_PROD: process.env.NODE_ENV === "production",
-  IS_TEST: process.env.NODE_ENV === "test",
+  NODE_ENV: import.meta.env.NODE_ENV || "development",
+  IS_DEV: import.meta.env.NODE_ENV === "development",
+  IS_PROD: import.meta.env.NODE_ENV === "production",
+  IS_TEST: import.meta.env.NODE_ENV === "test",
 } as const;
 
 // Development configuration

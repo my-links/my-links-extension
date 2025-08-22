@@ -106,8 +106,7 @@ export function usePopupState() {
       const response = await MessagingService.updateSettings(newSettings);
 
       if (response.success) {
-        // @ts-expect-error
-        setSettings((prev) => (prev ? { ...prev, ...newSettings } : null));
+        setSettings({ ...state.settings, ...newSettings } as ExtensionSettings);
         await NotificationService.showSettingsUpdated();
       }
     } catch (error) {

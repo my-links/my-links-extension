@@ -249,7 +249,7 @@ async function handleAddLinkToCollection(
   link: AddLinkRequest
 ) {
   const settings = await StorageService.getSettings();
-  const api = new MyLinksAPI(settings.mylinksUrl, settings.apiKey);
+  const api = new MyLinksAPI(settings.mylinksUrl, settings.apiKey!);
 
   const response = await api.addLink({
     name: link.name,
