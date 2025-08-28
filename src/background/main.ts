@@ -1,5 +1,6 @@
 import { MyLinksAPI } from "../services/api";
 import { BookmarksService } from "../services/bookmarks";
+import { BookmarksSyncService } from "../services/bookmarks-sync";
 import { NotificationService } from "../services/notifications";
 import { StorageService } from "../services/storage";
 import type {
@@ -8,6 +9,8 @@ import type {
   Message,
   UpdateCollectionRequest,
 } from "../types";
+
+const SYNC_DELAY_MS = 500;
 
 // Initialize context menus
 chrome.runtime.onInstalled.addListener(async () => {
@@ -29,6 +32,39 @@ chrome.runtime.onMessage.addListener(
     return true; // Keep message channel open for async response
   }
 );
+
+// Debounced sync trigger to avoid excessive API calls
+let scheduledSyncTimeout: number | undefined;
+function scheduleSync(delayMs: number = 800) {
+  if (scheduledSyncTimeout) {
+    clearTimeout(scheduledSyncTimeout);
+  }
+
+  scheduledSyncTimeout = setTimeout(async () => {
+    try {
+      await syncCollections();
+    } finally {
+      scheduledSyncTimeout = undefined;
+    }
+  }, delayMs);
+}
+
+// React to tab and window changes
+chrome.tabs.onActivated.addListener(() => {
+  scheduleSync(SYNC_DELAY_MS);
+});
+
+chrome.tabs.onUpdated.addListener((_tabId, changeInfo) => {
+  if (changeInfo.status === "complete") {
+    scheduleSync(SYNC_DELAY_MS);
+  }
+});
+
+chrome.windows.onFocusChanged.addListener((windowId) => {
+  if (windowId !== chrome.windows.WINDOW_ID_NONE) {
+    scheduleSync(SYNC_DELAY_MS);
+  }
+});
 
 async function setupContextMenus() {
   try {
@@ -110,6 +146,10 @@ async function syncCollections() {
       await StorageService.setCollections(collections);
       await StorageService.updateCache(collections);
       await StorageService.setSettings({ lastSync: new Date().toISOString() });
+
+      // Sync with bookmarks
+      await BookmarksSyncService.syncCollectionsToBookmarks(collections);
+
       console.log("Collections synced successfully");
     }
   } catch (error) {
@@ -151,6 +191,13 @@ async function handleMessage(
     switch (message.type) {
       case "INITIALIZE_EXTENSION":
         await handleInitialize();
+        sendResponse({ success: true });
+        break;
+
+      case "PAGE_VISIBILITY" as import("../types").MessageType:
+        if (message.visible === true) {
+          scheduleSync(SYNC_DELAY_MS);
+        }
         sendResponse({ success: true });
         break;
 

@@ -3,7 +3,6 @@
 
 console.log("MyLinks Extension: Content script loaded");
 
-// Listen for messages from the extension
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   console.log("Content script received message:", message);
 
@@ -24,9 +23,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   return true; // Keep message channel open for async response
 });
 
-// Add custom context menu functionality if needed
 document.addEventListener("contextmenu", (event) => {
-  // Store the clicked element info for potential use
   const target = event.target as HTMLElement;
   if (target.tagName === "A") {
     const link = target as HTMLAnchorElement;
@@ -40,7 +37,6 @@ document.addEventListener("contextmenu", (event) => {
   }
 });
 
-// Listen for selection changes to update context menu info
 document.addEventListener("selectionchange", () => {
   const selection = window.getSelection();
   if (selection && selection.toString().trim()) {
@@ -51,5 +47,12 @@ document.addEventListener("selectionchange", () => {
         selectionText: selection.toString().trim(),
       },
     });
+  }
+});
+
+document.addEventListener("visibilitychange", () => {
+  const isVisible = document.visibilityState === "visible";
+  if (isVisible) {
+    chrome.runtime.sendMessage({ type: "PAGE_VISIBILITY", visible: true });
   }
 });

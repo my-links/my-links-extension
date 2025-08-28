@@ -92,7 +92,8 @@ export type MessageType =
   | "GET_COLLECTIONS"
   | "GET_SETTINGS"
   | "UPDATE_SETTINGS"
-  | "RESET_EXTENSION";
+  | "RESET_EXTENSION"
+  | "PAGE_VISIBILITY";
 
 export type Message = {
   type: MessageType;

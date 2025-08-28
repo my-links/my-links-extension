@@ -1,4 +1,5 @@
-// Chrome types are available globally in extension context
+const BOOKMARK_BAR_FOLDER_ID = "1";
+const OTHER_BOOKMARKS_FOLDER_ID = "2";
 
 export class BookmarksService {
   private static readonly BACKUP_FOLDER_NAME = "Backup Favorites";
@@ -6,7 +7,9 @@ export class BookmarksService {
   static async backupBookmarks(): Promise<void> {
     try {
       // Get all bookmarks from the bookmark bar
-      const bookmarkBar = await chrome.bookmarks.getChildren("1");
+      const bookmarkBar = await chrome.bookmarks.getChildren(
+        BOOKMARK_BAR_FOLDER_ID
+      );
 
       // Check if there are any bookmarks or folders to backup (excluding the backup folder itself)
       const itemsToBackup = bookmarkBar.filter(
@@ -20,7 +23,7 @@ export class BookmarksService {
 
       // Create backup folder
       const backupFolder = await chrome.bookmarks.create({
-        parentId: "1", // Bookmark bar
+        parentId: OTHER_BOOKMARKS_FOLDER_ID,
         title: this.BACKUP_FOLDER_NAME,
       });
 
@@ -38,29 +41,11 @@ export class BookmarksService {
     }
   }
 
-  static async getBackupFolder(): Promise<chrome.bookmarks.BookmarkTreeNode | null> {
-    try {
-      const bookmarkBar = await chrome.bookmarks.getChildren("1");
-      return (
-        bookmarkBar.find(
-          (bookmark: any) =>
-            bookmark.title === this.BACKUP_FOLDER_NAME && !bookmark.url
-        ) || null
-      );
-    } catch (error) {
-      console.error("Failed to get backup folder:", error);
-      return null;
-    }
-  }
-
-  static async isBackupFolderExists(): Promise<boolean> {
-    const backupFolder = await this.getBackupFolder();
-    return backupFolder !== null;
-  }
-
   static async hasBookmarksToBackup(): Promise<boolean> {
     try {
-      const bookmarkBar = await chrome.bookmarks.getChildren("1");
+      const bookmarkBar = await chrome.bookmarks.getChildren(
+        BOOKMARK_BAR_FOLDER_ID
+      );
       const itemsToBackup = bookmarkBar.filter(
         (bookmark: any) => bookmark.title !== this.BACKUP_FOLDER_NAME
       );
@@ -75,7 +60,9 @@ export class BookmarksService {
     chrome.bookmarks.BookmarkTreeNode[]
   > {
     try {
-      const bookmarkBar = await chrome.bookmarks.getChildren("1");
+      const bookmarkBar = await chrome.bookmarks.getChildren(
+        BOOKMARK_BAR_FOLDER_ID
+      );
       return bookmarkBar.filter(
         (bookmark: any) => bookmark.title !== this.BACKUP_FOLDER_NAME
       );
@@ -88,11 +75,11 @@ export class BookmarksService {
   static async addToBookmarkBar(
     title: string,
     url: string,
-    parentId?: string
+    parentId: string = BOOKMARK_BAR_FOLDER_ID
   ): Promise<chrome.bookmarks.BookmarkTreeNode> {
     try {
       return await chrome.bookmarks.create({
-        parentId: parentId || "1", // Default to bookmark bar
+        parentId,
         title,
         url,
       });

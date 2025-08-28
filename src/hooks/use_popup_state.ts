@@ -1,3 +1,4 @@
+import { BookmarksSyncService } from "@/services/bookmarks-sync";
 import { MessagingService } from "@/services/messaging";
 import { NotificationService } from "@/services/notifications";
 import { StorageService } from "@/services/storage";
@@ -118,11 +119,19 @@ export function usePopupState() {
 
   const handleCollectionsUpdate = async () => {
     try {
+      console.log("Starting collections update...");
       const response = await MessagingService.syncCollections();
       if (response.success) {
+        console.log("Collections synced successfully, updating state...");
         setCollections(response.data);
+
+        // Sync with bookmarks
+        console.log("Starting bookmarks sync...");
+        await BookmarksSyncService.syncCollectionsToBookmarks(response.data);
+        console.log("Bookmarks sync completed");
       }
     } catch (error) {
+      console.error("Error in handleCollectionsUpdate:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Failed to sync collections";
       await NotificationService.showSyncError(errorMessage);
@@ -139,6 +148,25 @@ export function usePopupState() {
       if (response.success) {
         await NotificationService.showLinkAdded();
         setPendingLink(null);
+
+        // Find collection name for bookmarks sync
+        const collection = state.collections.find((c) => c.id === collectionId);
+        if (collection) {
+          await BookmarksSyncService.addLinkToBookmarks(
+            {
+              id: "", // Will be set by API
+              name: link.name,
+              url: link.url,
+              favorite: false,
+              description: link.description,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              collectionId: link.collectionId,
+            },
+            collection.name
+          );
+        }
+
         await handleCollectionsUpdate();
       }
     } catch (error) {
@@ -150,13 +178,16 @@ export function usePopupState() {
 
   const handleCreateCollection = async (props: CreateCollectionRequest) => {
     try {
+      console.log("Creating collection:", props);
       const response = await MessagingService.createCollection(props);
 
       if (response.success) {
+        console.log("Collection created successfully");
         await NotificationService.showCollectionCreated();
         await handleCollectionsUpdate();
       }
     } catch (error) {
+      console.error("Error creating collection:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Failed to create collection";
       await NotificationService.showApiError(errorMessage);
@@ -184,6 +215,15 @@ export function usePopupState() {
 
       if (response.success) {
         await NotificationService.showCollectionDeleted();
+
+        // Find collection name for bookmarks sync
+        const collection = state.collections.find((c) => c.id === id);
+        if (collection) {
+          await BookmarksSyncService.removeCollectionFromBookmarks(
+            collection.name
+          );
+        }
+
         await handleCollectionsUpdate();
       }
     } catch (error) {
