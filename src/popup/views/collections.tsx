@@ -104,8 +104,7 @@ export function CollectionsView({
 					{collections.length === 0 ? (
 						<div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
 							<p className="text-center text-sm text-gray-500 dark:text-gray-400">
-								No collections found. Create your first collection to get
-								started.
+								{chrome.i18n.getMessage('noCollectionsFound')}
 							</p>
 						</div>
 					) : (
@@ -121,7 +120,8 @@ export function CollectionsView({
 												{collection.name}
 											</h3>
 											<span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-												{collection.links.length} links
+												{collection.links.length}{' '}
+												{chrome.i18n.getMessage('links')}
 											</span>
 										</div>
 										{collection.description && (
@@ -178,7 +178,7 @@ export function CollectionsView({
 														className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
 													>
 														<IconExternalLink size={14} />
-														View on MyLinks
+														{chrome.i18n.getMessage('viewOnMyLinks')}
 													</button>
 													<div className="border-t border-gray-200 dark:border-gray-700" />
 													<button

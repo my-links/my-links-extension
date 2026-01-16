@@ -122,5 +122,145 @@
   "deleteConfirmation": {
     "message": "Are you sure you want to delete this collection?",
     "description": "Delete confirmation message"
+  },
+  "back": {
+    "message": "Back",
+    "description": "Back button text"
+  },
+  "addPageToCollection": {
+    "message": "Add this page to one of your collections:",
+    "description": "Add page to collection description"
+  },
+  "url": {
+    "message": "URL",
+    "description": "URL field label"
+  },
+  "name": {
+    "message": "Name",
+    "description": "Name field label"
+  },
+  "linkNamePlaceholder": {
+    "message": "Enter link name",
+    "description": "Link name field placeholder"
+  },
+  "description": {
+    "message": "Description",
+    "description": "Description field label"
+  },
+  "linkDescriptionPlaceholder": {
+    "message": "Enter link description (optional)",
+    "description": "Link description field placeholder"
+  },
+  "favorite": {
+    "message": "Favorite",
+    "description": "Favorite checkbox label"
+  },
+  "collection": {
+    "message": "Collection",
+    "description": "Collection field label"
+  },
+  "selectCollection": {
+    "message": "Select a collection",
+    "description": "Select collection placeholder"
+  },
+  "noCollectionsFound": {
+    "message": "No collections found. Create your first collection to get started.",
+    "description": "No collections found message"
+  },
+  "links": {
+    "message": "links",
+    "description": "Links count label"
+  },
+  "viewOnMyLinks": {
+    "message": "View on MyLinks",
+    "description": "View on MyLinks menu item"
+  },
+  "resetExtension": {
+    "message": "Reset Extension",
+    "description": "Reset extension button text"
+  },
+  "resetExtensionDescription": {
+    "message": "This will completely reset the extension to its initial state:",
+    "description": "Reset extension description"
+  },
+  "resetExtensionClearSettings": {
+    "message": "Clear all settings and API key",
+    "description": "Reset extension clear settings item"
+  },
+  "resetExtensionRemoveCollections": {
+    "message": "Remove all cached collections",
+    "description": "Reset extension remove collections item"
+  },
+  "resetExtensionMarkUninitialized": {
+    "message": "Mark extension as uninitialized",
+    "description": "Reset extension mark uninitialized item"
+  },
+  "resetExtensionSetupAgain": {
+    "message": "You will need to go through setup again",
+    "description": "Reset extension setup again item"
+  },
+  "resetExtensionCannotUndo": {
+    "message": "This action cannot be undone!",
+    "description": "Reset extension cannot undo warning"
+  },
+  "open": {
+    "message": "Open",
+    "description": "Open button text"
+  },
+  "apiKeyPlaceholder": {
+    "message": "Enter your API key",
+    "description": "API key field placeholder"
+  },
+  "settingsDescription": {
+    "message": "Configure your MyLinks instance and API key to start using the extension.",
+    "description": "Settings description"
+  },
+  "extensionReset": {
+    "message": "Extension Reset",
+    "description": "Extension reset notification title"
+  },
+  "extensionResetSuccess": {
+    "message": "Extension has been reset successfully. Please reload the popup.",
+    "description": "Extension reset success message"
+  },
+  "resetFailed": {
+    "message": "Reset Failed",
+    "description": "Reset failed notification title"
+  },
+  "failedToSaveSettings": {
+    "message": "Failed to save settings",
+    "description": "Failed to save settings error message"
+  },
+  "failedToResetExtension": {
+    "message": "Failed to reset extension",
+    "description": "Failed to reset extension error message"
+  },
+  "thisWill": {
+    "message": "This will:",
+    "description": "This will label"
+  },
+  "backupBookmarksDescription": {
+    "message": "Backup your current bookmarks and folders to \"Backup Favorites\" folder (if any exist)",
+    "description": "Backup bookmarks description"
+  },
+  "setupExtensionDescription": {
+    "message": "Set up the extension for use with MyLinks",
+    "description": "Setup extension description"
+  },
+  "configureBookmarkBarDescription": {
+    "message": "Configure the bookmark bar for MyLinks integration",
+    "description": "Configure bookmark bar description"
+  },
+  "loadingMyLinks": {
+    "message": "Loading MyLinks...",
+    "description": "Loading MyLinks text"
+  },
+  "retry": {
+    "message": "Retry",
+    "description": "Retry button text"
+  },
+  "failedToLoadDashboard": {
+    "message": "Failed to load MyLinks dashboard",
+    "description": "Failed to load dashboard error message"
   }
 }

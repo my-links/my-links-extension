@@ -22,24 +22,27 @@ export function InitializationView({ onInitialize }: InitializationViewProps) {
 							<IconInfoCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-600 dark:text-blue-400" />
 							<div className="flex-1">
 								<p className="mb-2 text-sm font-medium text-blue-800 dark:text-blue-200">
-									This will:
+									{chrome.i18n.getMessage('thisWill')}
 								</p>
 								<ul className="space-y-1.5">
 									<li className="flex items-start gap-2 text-sm text-blue-700 dark:text-blue-300">
 										<IconCheck className="mt-0.5 h-3 w-3 flex-shrink-0 rounded-full bg-blue-600 p-0.5 text-white dark:bg-blue-400" />
 										<span>
-											Backup your current bookmarks and folders to &quot;Backup
-											Favorites&quot; folder (if any exist)
+											{chrome.i18n.getMessage('backupBookmarksDescription')}
 										</span>
 									</li>
 									<li className="flex items-start gap-2 text-sm text-blue-700 dark:text-blue-300">
 										<IconCheck className="mt-0.5 h-3 w-3 flex-shrink-0 rounded-full bg-blue-600 p-0.5 text-white dark:bg-blue-400" />
-										<span>Set up the extension for use with MyLinks</span>
+										<span>
+											{chrome.i18n.getMessage('setupExtensionDescription')}
+										</span>
 									</li>
 									<li className="flex items-start gap-2 text-sm text-blue-700 dark:text-blue-300">
 										<IconCheck className="mt-0.5 h-3 w-3 flex-shrink-0 rounded-full bg-blue-600 p-0.5 text-white dark:bg-blue-400" />
 										<span>
-											Configure the bookmark bar for MyLinks integration
+											{chrome.i18n.getMessage(
+												'configureBookmarkBarDescription'
+											)}
 										</span>
 									</li>
 								</ul>

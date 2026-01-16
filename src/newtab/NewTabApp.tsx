@@ -49,7 +49,7 @@ export function NewTabApp() {
 		return (
 			<div className="mx-auto max-w-sm py-8">
 				<p className="text-center text-lg text-gray-900 dark:text-white">
-					Loading MyLinks...
+					{chrome.i18n.getMessage('loadingMyLinks')}
 				</p>
 			</div>
 		);
@@ -63,7 +63,7 @@ export function NewTabApp() {
 						<IconAlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-600 dark:text-red-400" />
 						<div className="flex-1">
 							<h3 className="mb-1 text-sm font-semibold text-red-800 dark:text-red-200">
-								Error
+								{chrome.i18n.getMessage('error')}
 							</h3>
 							<p className="mb-3 text-sm text-red-700 dark:text-red-300">
 								{error}
@@ -74,7 +74,7 @@ export function NewTabApp() {
 								className="flex items-center gap-2 rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
 							>
 								<IconRefresh size={16} />
-								Retry
+								{chrome.i18n.getMessage('retry')}
 							</button>
 						</div>
 					</div>
@@ -91,7 +91,9 @@ export function NewTabApp() {
 				title="MyLinks Dashboard"
 				className="block h-full w-full border-0"
 				onLoad={() => setLoading(false)}
-				onError={() => setError('Failed to load MyLinks dashboard')}
+				onError={() =>
+					setError(chrome.i18n.getMessage('failedToLoadDashboard'))
+				}
 			/>
 		</div>
 	);

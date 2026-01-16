@@ -1,126 +1,266 @@
 {
-  "extensionName": {
-    "message": "Extension MyLinks",
-    "description": "Nom de l'extension"
-  },
-  "extensionDescription": {
-    "message": "Gérez vos favoris avec les collections MyLinks",
-    "description": "Description de l'extension"
-  },
-  "initialize": {
-    "message": "Initialiser",
-    "description": "Texte du bouton d'initialisation"
-  },
-  "initialization": {
-    "message": "Initialisation",
-    "description": "Titre d'initialisation"
-  },
-  "initializationDescription": {
-    "message": "Bienvenue dans l'extension MyLinks ! Cela va sauvegarder vos favoris actuels et configurer l'extension.",
-    "description": "Description d'initialisation"
-  },
-  "backupCreated": {
-    "message": "Sauvegarde créée avec succès",
-    "description": "Message de succès de sauvegarde"
-  },
-  "settings": {
-    "message": "Paramètres",
-    "description": "Titre des paramètres"
-  },
-  "mylinksUrl": {
-    "message": "URL MyLinks",
-    "description": "Label du champ URL MyLinks"
-  },
-  "apiKey": {
-    "message": "Clé API",
-    "description": "Label du champ clé API"
-  },
-  "getApiKey": {
-    "message": "Obtenir la clé API",
-    "description": "Texte du bouton obtenir la clé API"
-  },
-  "save": {
-    "message": "Enregistrer",
-    "description": "Texte du bouton enregistrer"
-  },
-  "collections": {
-    "message": "Collections",
-    "description": "Titre des collections"
-  },
-  "createCollection": {
-    "message": "Créer une collection",
-    "description": "Texte du bouton créer une collection"
-  },
-  "editCollection": {
-    "message": "Modifier la collection",
-    "description": "Texte du bouton modifier la collection"
-  },
-  "deleteCollection": {
-    "message": "Supprimer la collection",
-    "description": "Texte du bouton supprimer la collection"
-  },
-  "collectionName": {
-    "message": "Nom de la collection",
-    "description": "Label du champ nom de collection"
-  },
-  "collectionNamePlaceholder": {
-    "message": "Entrer le nom de la collection",
-    "description": "Placeholder du champ nom de collection"
-  },
-  "collectionDescription": {
-    "message": "Description de la collection",
-    "description": "Label du champ description de collection"
-  },
-  "collectionDescriptionPlaceholder": {
-    "message": "Entrer la description de la collection (optionnel)",
-    "description": "Placeholder du champ description de collection"
-  },
-  "collectionVisibility": {
-    "message": "Visibilité de la collection",
-    "description": "Label du champ visibilité de collection"
-  },
-  "public": {
-    "message": "Public",
-    "description": "Visibilité publique de la collection"
-  },
-  "private": {
-    "message": "Privé",
-    "description": "Visibilité privée de la collection"
-  },
-  "addToCollection": {
-    "message": "Ajouter à la collection",
-    "description": "Menu contextuel ajouter à la collection"
-  },
-  "linkAdded": {
-    "message": "Lien ajouté avec succès",
-    "description": "Message de succès d'ajout de lien"
-  },
-  "error": {
-    "message": "Erreur",
-    "description": "Titre d'erreur"
-  },
-  "invalidApiKey": {
-    "message": "Clé API invalide. Veuillez vérifier vos paramètres.",
-    "description": "Message d'erreur de clé API invalide"
-  },
-  "networkError": {
-    "message": "Erreur réseau. Veuillez vérifier votre connexion.",
-    "description": "Message d'erreur réseau"
-  },
-  "loading": {
-    "message": "Chargement...",
-    "description": "Texte de chargement"
-  },
-  "cancel": {
-    "message": "Annuler",
-    "description": "Texte du bouton annuler"
-  },
-  "confirm": {
-    "message": "Confirmer",
-    "description": "Texte du bouton confirmer"
-  },
-  "deleteConfirmation": {
-    "message": "Êtes-vous sûr de vouloir supprimer cette collection ?",
-    "description": "Message de confirmation de suppression"
-  }
+	"extensionName": {
+		"message": "Extension MyLinks",
+		"description": "Nom de l'extension"
+	},
+	"extensionDescription": {
+		"message": "Gérez vos favoris avec les collections MyLinks",
+		"description": "Description de l'extension"
+	},
+	"initialize": {
+		"message": "Initialiser",
+		"description": "Texte du bouton d'initialisation"
+	},
+	"initialization": {
+		"message": "Initialisation",
+		"description": "Titre d'initialisation"
+	},
+	"initializationDescription": {
+		"message": "Bienvenue dans l'extension MyLinks ! Cela va sauvegarder vos favoris actuels et configurer l'extension.",
+		"description": "Description d'initialisation"
+	},
+	"backupCreated": {
+		"message": "Sauvegarde créée avec succès",
+		"description": "Message de succès de sauvegarde"
+	},
+	"settings": {
+		"message": "Paramètres",
+		"description": "Titre des paramètres"
+	},
+	"mylinksUrl": {
+		"message": "URL MyLinks",
+		"description": "Label du champ URL MyLinks"
+	},
+	"apiKey": {
+		"message": "Clé API",
+		"description": "Label du champ clé API"
+	},
+	"getApiKey": {
+		"message": "Obtenir la clé API",
+		"description": "Texte du bouton obtenir la clé API"
+	},
+	"save": {
+		"message": "Enregistrer",
+		"description": "Texte du bouton enregistrer"
+	},
+	"collections": {
+		"message": "Collections",
+		"description": "Titre des collections"
+	},
+	"createCollection": {
+		"message": "Créer une collection",
+		"description": "Texte du bouton créer une collection"
+	},
+	"editCollection": {
+		"message": "Modifier la collection",
+		"description": "Texte du bouton modifier la collection"
+	},
+	"deleteCollection": {
+		"message": "Supprimer la collection",
+		"description": "Texte du bouton supprimer la collection"
+	},
+	"collectionName": {
+		"message": "Nom de la collection",
+		"description": "Label du champ nom de collection"
+	},
+	"collectionNamePlaceholder": {
+		"message": "Entrer le nom de la collection",
+		"description": "Placeholder du champ nom de collection"
+	},
+	"collectionDescription": {
+		"message": "Description de la collection",
+		"description": "Label du champ description de collection"
+	},
+	"collectionDescriptionPlaceholder": {
+		"message": "Entrer la description de la collection (optionnel)",
+		"description": "Placeholder du champ description de collection"
+	},
+	"collectionVisibility": {
+		"message": "Visibilité de la collection",
+		"description": "Label du champ visibilité de collection"
+	},
+	"public": {
+		"message": "Public",
+		"description": "Visibilité publique de la collection"
+	},
+	"private": {
+		"message": "Privé",
+		"description": "Visibilité privée de la collection"
+	},
+	"addToCollection": {
+		"message": "Ajouter à la collection",
+		"description": "Menu contextuel ajouter à la collection"
+	},
+	"linkAdded": {
+		"message": "Lien ajouté avec succès",
+		"description": "Message de succès d'ajout de lien"
+	},
+	"error": {
+		"message": "Erreur",
+		"description": "Titre d'erreur"
+	},
+	"invalidApiKey": {
+		"message": "Clé API invalide. Veuillez vérifier vos paramètres.",
+		"description": "Message d'erreur de clé API invalide"
+	},
+	"networkError": {
+		"message": "Erreur réseau. Veuillez vérifier votre connexion.",
+		"description": "Message d'erreur réseau"
+	},
+	"loading": {
+		"message": "Chargement...",
+		"description": "Texte de chargement"
+	},
+	"cancel": {
+		"message": "Annuler",
+		"description": "Texte du bouton annuler"
+	},
+	"confirm": {
+		"message": "Confirmer",
+		"description": "Texte du bouton confirmer"
+	},
+	"deleteConfirmation": {
+		"message": "Êtes-vous sûr de vouloir supprimer cette collection ?",
+		"description": "Message de confirmation de suppression"
+	},
+	"back": {
+		"message": "Retour",
+		"description": "Texte du bouton retour"
+	},
+	"addPageToCollection": {
+		"message": "Ajouter cette page à l'une de vos collections :",
+		"description": "Description ajouter page à la collection"
+	},
+	"url": {
+		"message": "URL",
+		"description": "Label du champ URL"
+	},
+	"name": {
+		"message": "Nom",
+		"description": "Label du champ nom"
+	},
+	"linkNamePlaceholder": {
+		"message": "Entrer le nom du lien",
+		"description": "Placeholder du champ nom de lien"
+	},
+	"description": {
+		"message": "Description",
+		"description": "Label du champ description"
+	},
+	"linkDescriptionPlaceholder": {
+		"message": "Entrer la description du lien (optionnel)",
+		"description": "Placeholder du champ description de lien"
+	},
+	"favorite": {
+		"message": "Favori",
+		"description": "Label de la case à cocher favori"
+	},
+	"collection": {
+		"message": "Collection",
+		"description": "Label du champ collection"
+	},
+	"selectCollection": {
+		"message": "Sélectionner une collection",
+		"description": "Placeholder sélectionner une collection"
+	},
+	"noCollectionsFound": {
+		"message": "Aucune collection trouvée. Créez votre première collection pour commencer.",
+		"description": "Message aucune collection trouvée"
+	},
+	"links": {
+		"message": "liens",
+		"description": "Label du nombre de liens"
+	},
+	"viewOnMyLinks": {
+		"message": "Voir sur MyLinks",
+		"description": "Élément de menu voir sur MyLinks"
+	},
+	"resetExtension": {
+		"message": "Réinitialiser l'extension",
+		"description": "Texte du bouton réinitialiser l'extension"
+	},
+	"resetExtensionDescription": {
+		"message": "Cela réinitialisera complètement l'extension à son état initial :",
+		"description": "Description réinitialisation extension"
+	},
+	"resetExtensionClearSettings": {
+		"message": "Effacer tous les paramètres et la clé API",
+		"description": "Élément réinitialisation effacer paramètres"
+	},
+	"resetExtensionRemoveCollections": {
+		"message": "Supprimer toutes les collections en cache",
+		"description": "Élément réinitialisation supprimer collections"
+	},
+	"resetExtensionMarkUninitialized": {
+		"message": "Marquer l'extension comme non initialisée",
+		"description": "Élément réinitialisation marquer non initialisée"
+	},
+	"resetExtensionSetupAgain": {
+		"message": "Vous devrez refaire la configuration",
+		"description": "Élément réinitialisation refaire configuration"
+	},
+	"resetExtensionCannotUndo": {
+		"message": "Cette action ne peut pas être annulée !",
+		"description": "Avertissement réinitialisation ne peut pas être annulée"
+	},
+	"open": {
+		"message": "Ouvrir",
+		"description": "Texte du bouton ouvrir"
+	},
+	"apiKeyPlaceholder": {
+		"message": "Entrer votre clé API",
+		"description": "Placeholder du champ clé API"
+	},
+	"settingsDescription": {
+		"message": "Configurez votre instance MyLinks et votre clé API pour commencer à utiliser l'extension.",
+		"description": "Description des paramètres"
+	},
+	"extensionReset": {
+		"message": "Extension réinitialisée",
+		"description": "Titre de notification réinitialisation extension"
+	},
+	"extensionResetSuccess": {
+		"message": "L'extension a été réinitialisée avec succès. Veuillez recharger la popup.",
+		"description": "Message de succès réinitialisation extension"
+	},
+	"resetFailed": {
+		"message": "Échec de la réinitialisation",
+		"description": "Titre de notification échec réinitialisation"
+	},
+	"failedToSaveSettings": {
+		"message": "Échec de l'enregistrement des paramètres",
+		"description": "Message d'erreur échec enregistrement paramètres"
+	},
+	"failedToResetExtension": {
+		"message": "Échec de la réinitialisation de l'extension",
+		"description": "Message d'erreur échec réinitialisation extension"
+	},
+	"thisWill": {
+		"message": "Cela va :",
+		"description": "Label cela va"
+	},
+	"backupBookmarksDescription": {
+		"message": "Sauvegarder vos favoris et dossiers actuels dans le dossier \"Backup Favorites\" (s'il en existe)",
+		"description": "Description sauvegarde favoris"
+	},
+	"setupExtensionDescription": {
+		"message": "Configurer l'extension pour l'utilisation avec MyLinks",
+		"description": "Description configuration extension"
+	},
+	"configureBookmarkBarDescription": {
+		"message": "Configurer la barre de favoris pour l'intégration MyLinks",
+		"description": "Description configuration barre de favoris"
+	},
+	"loadingMyLinks": {
+		"message": "Chargement de MyLinks...",
+		"description": "Texte chargement MyLinks"
+	},
+	"retry": {
+		"message": "Réessayer",
+		"description": "Texte du bouton réessayer"
+	},
+	"failedToLoadDashboard": {
+		"message": "Échec du chargement du tableau de bord MyLinks",
+		"description": "Message d'erreur échec chargement tableau de bord"
+	}
 }

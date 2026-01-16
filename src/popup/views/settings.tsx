@@ -44,7 +44,9 @@ export function SettingsView({
 		} catch (error) {
 			showNotification(
 				chrome.i18n.getMessage('error'),
-				error instanceof Error ? error.message : 'Failed to save settings'
+				error instanceof Error
+					? error.message
+					: chrome.i18n.getMessage('failedToSaveSettings')
 			);
 		} finally {
 			setLoading(false);
@@ -65,25 +67,25 @@ export function SettingsView({
 
 	const handleReset = () => {
 		openConfirmModal({
-			title: 'Reset Extension',
+			title: chrome.i18n.getMessage('resetExtension'),
 			children: (
 				<div className="space-y-3">
 					<p className="text-sm text-gray-700 dark:text-gray-300">
-						This will completely reset the extension to its initial state:
+						{chrome.i18n.getMessage('resetExtensionDescription')}
 					</p>
 					<ul className="list-disc space-y-1 pl-5 text-sm text-gray-600 dark:text-gray-400">
-						<li>Clear all settings and API key</li>
-						<li>Remove all cached collections</li>
-						<li>Mark extension as uninitialized</li>
-						<li>You will need to go through setup again</li>
+						<li>{chrome.i18n.getMessage('resetExtensionClearSettings')}</li>
+						<li>{chrome.i18n.getMessage('resetExtensionRemoveCollections')}</li>
+						<li>{chrome.i18n.getMessage('resetExtensionMarkUninitialized')}</li>
+						<li>{chrome.i18n.getMessage('resetExtensionSetupAgain')}</li>
 					</ul>
 					<p className="text-sm font-semibold text-red-600 dark:text-red-400">
-						This action cannot be undone!
+						{chrome.i18n.getMessage('resetExtensionCannotUndo')}
 					</p>
 				</div>
 			),
-			confirmLabel: 'Reset Extension',
-			cancelLabel: 'Cancel',
+			confirmLabel: chrome.i18n.getMessage('resetExtension'),
+			cancelLabel: chrome.i18n.getMessage('cancel'),
 			confirmColor: 'red',
 			onConfirm: async () => {
 				try {
@@ -95,8 +97,8 @@ export function SettingsView({
 
 					if (response.success) {
 						showNotification(
-							'Extension Reset',
-							'Extension has been reset successfully. Please reload the popup.'
+							chrome.i18n.getMessage('extensionReset'),
+							chrome.i18n.getMessage('extensionResetSuccess')
 						);
 
 						setMylinksUrl('https://www.mylinks.app');
@@ -108,8 +110,10 @@ export function SettingsView({
 					}
 				} catch (error) {
 					showNotification(
-						'Reset Failed',
-						error instanceof Error ? error.message : 'Failed to reset extension'
+						chrome.i18n.getMessage('resetFailed'),
+						error instanceof Error
+							? error.message
+							: chrome.i18n.getMessage('failedToResetExtension')
 					);
 				} finally {
 					setLoading(false);
@@ -128,8 +132,7 @@ export function SettingsView({
 
 					<div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
 						<p className="text-sm text-blue-800 dark:text-blue-200">
-							Configure your MyLinks instance and API key to start using the
-							extension.
+							{chrome.i18n.getMessage('settingsDescription')}
 						</p>
 					</div>
 
@@ -155,7 +158,7 @@ export function SettingsView({
 									className="flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
 								>
 									<IconExternalLink size={14} />
-									Open
+									{chrome.i18n.getMessage('open')}
 								</button>
 							</div>
 						</div>
@@ -171,7 +174,7 @@ export function SettingsView({
 							</div>
 							<input
 								type="password"
-								placeholder="Enter your API key"
+								placeholder={chrome.i18n.getMessage('apiKeyPlaceholder')}
 								value={apiKey}
 								onChange={(e) => setApiKey(e.target.value)}
 								className="w-full rounded-md border border-gray-300 bg-white pl-9 pr-24 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
@@ -197,7 +200,7 @@ export function SettingsView({
 							className="flex items-center gap-2 rounded-md border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-50 dark:border-red-600 dark:bg-gray-700 dark:text-red-400 dark:hover:bg-red-900/20"
 						>
 							<IconTrash size={16} />
-							Reset Extension
+							{chrome.i18n.getMessage('resetExtension')}
 						</button>
 						<button
 							type="button"
@@ -205,7 +208,9 @@ export function SettingsView({
 							disabled={!mylinksUrl || loading}
 							className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 						>
-							{loading ? 'Loading...' : chrome.i18n.getMessage('save')}
+							{loading
+								? chrome.i18n.getMessage('loading')
+								: chrome.i18n.getMessage('save')}
 						</button>
 					</div>
 				</div>

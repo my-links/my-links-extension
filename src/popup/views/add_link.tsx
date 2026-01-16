@@ -55,7 +55,7 @@ export function AddLinkView({
 							className="flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
 						>
 							<IconArrowLeft size={14} />
-							Back
+							{chrome.i18n.getMessage('back')}
 						</button>
 					</div>
 
@@ -65,13 +65,13 @@ export function AddLinkView({
 
 					<div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
 						<p className="text-sm text-blue-800 dark:text-blue-200">
-							Add this page to one of your collections:
+							{chrome.i18n.getMessage('addPageToCollection')}
 						</p>
 					</div>
 
 					<div>
 						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-							URL
+							{chrome.i18n.getMessage('url')}
 						</label>
 						<div className="relative">
 							<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -88,12 +88,12 @@ export function AddLinkView({
 
 					<div>
 						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-							Name
+							{chrome.i18n.getMessage('name')}
 							<span className="text-red-500">*</span>
 						</label>
 						<input
 							type="text"
-							placeholder="Enter link name"
+							placeholder={chrome.i18n.getMessage('linkNamePlaceholder')}
 							value={formState.name}
 							onChange={(e) =>
 								setFormState({ ...formState, name: e.target.value })
@@ -104,10 +104,10 @@ export function AddLinkView({
 
 					<div>
 						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-							Description
+							{chrome.i18n.getMessage('description')}
 						</label>
 						<textarea
-							placeholder="Enter link description (optional)"
+							placeholder={chrome.i18n.getMessage('linkDescriptionPlaceholder')}
 							value={formState.description}
 							onChange={(e) =>
 								setFormState({ ...formState, description: e.target.value })
@@ -131,13 +131,13 @@ export function AddLinkView({
 							htmlFor="favorite"
 							className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
 						>
-							Favorite
+							{chrome.i18n.getMessage('favorite')}
 						</label>
 					</div>
 
 					<div>
 						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-							Collection
+							{chrome.i18n.getMessage('collection')}
 							<span className="text-red-500">*</span>
 						</label>
 						<select
@@ -147,7 +147,9 @@ export function AddLinkView({
 							}
 							className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
 						>
-							<option value="">Select a collection</option>
+							<option value="">
+								{chrome.i18n.getMessage('selectCollection')}
+							</option>
 							{collections.map((collection) => (
 								<option
 									key={String(collection.id)}
@@ -176,7 +178,7 @@ export function AddLinkView({
 							className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 						>
 							{loading
-								? 'Loading...'
+								? chrome.i18n.getMessage('loading')
 								: chrome.i18n.getMessage('addToCollection')}
 						</button>
 					</div>
