@@ -1,58 +1,58 @@
-import { CreateCollectionForm } from "@/components/forms/collections/create_collection";
-import { EditCollectionForm } from "@/components/forms/collections/edit_collection";
+import { CreateCollectionForm } from '@/components/forms/collections/create_collection';
+import { EditCollectionForm } from '@/components/forms/collections/edit_collection';
+import { useModalContext } from '@/components/modals';
 import {
-  CreateCollectionRequest,
-  MyLinksCollection,
-  UpdateCollectionRequest,
-} from "@/types";
-import { Text } from "@mantine/core";
-import { modals } from "@mantine/modals";
+	CreateCollectionRequest,
+	MyLinksCollection,
+	UpdateCollectionRequest,
+} from '@/types';
 
 export function useModals() {
-  const openCreateCollectionModal = (
-    onCreate: (props: CreateCollectionRequest) => void
-  ) => {
-    modals.open({
-      title: chrome.i18n.getMessage("createCollection"),
-      children: <CreateCollectionForm onCreate={onCreate} />,
-    });
-  };
+	const { openModal, openConfirmModal } = useModalContext();
 
-  const openEditCollectionModal = (
-    collection: MyLinksCollection,
-    onUpdate: (props: UpdateCollectionRequest) => void
-  ) => {
-    modals.open({
-      title: chrome.i18n.getMessage("editCollection"),
-      children: (
-        <EditCollectionForm collection={collection} onUpdate={onUpdate} />
-      ),
-    });
-  };
+	const openCreateCollectionModal = (
+		onCreate: (props: CreateCollectionRequest) => void
+	) => {
+		openModal({
+			title: chrome.i18n.getMessage('createCollection'),
+			children: <CreateCollectionForm onCreate={onCreate} />,
+		});
+	};
 
-  const openDeleteConfirmationModal = (
-    collection: MyLinksCollection,
-    onConfirm: () => void
-  ) => {
-    modals.openConfirmModal({
-      title: chrome.i18n.getMessage("deleteCollection"),
-      children: (
-        <Text size="sm">
-          {chrome.i18n.getMessage("deleteConfirmation")} "{collection.name}"?
-        </Text>
-      ),
-      labels: {
-        confirm: chrome.i18n.getMessage("confirm"),
-        cancel: chrome.i18n.getMessage("cancel"),
-      },
-      confirmProps: { color: "red" },
-      onConfirm,
-    });
-  };
+	const openEditCollectionModal = (
+		collection: MyLinksCollection,
+		onUpdate: (props: UpdateCollectionRequest) => void
+	) => {
+		openModal({
+			title: chrome.i18n.getMessage('editCollection'),
+			children: (
+				<EditCollectionForm collection={collection} onUpdate={onUpdate} />
+			),
+		});
+	};
 
-  return {
-    openCreateCollectionModal,
-    openEditCollectionModal,
-    openDeleteConfirmationModal,
-  };
+	const openDeleteConfirmationModal = (
+		collection: MyLinksCollection,
+		onConfirm: () => void
+	) => {
+		openConfirmModal({
+			title: chrome.i18n.getMessage('deleteCollection'),
+			children: (
+				<p className="text-sm text-gray-700 dark:text-gray-300">
+					{chrome.i18n.getMessage('deleteConfirmation')} &quot;{collection.name}
+					&quot;?
+				</p>
+			),
+			confirmLabel: chrome.i18n.getMessage('confirm'),
+			cancelLabel: chrome.i18n.getMessage('cancel'),
+			confirmColor: 'red',
+			onConfirm,
+		});
+	};
+
+	return {
+		openCreateCollectionModal,
+		openEditCollectionModal,
+		openDeleteConfirmationModal,
+	};
 }

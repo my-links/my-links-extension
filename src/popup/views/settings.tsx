@@ -1,206 +1,215 @@
+import { useModalContext } from '@/components/modals';
 import {
-  Alert,
-  Button,
-  Card,
-  Group,
-  List,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
-import { modals } from "@mantine/modals";
-import {
-  IconExternalLink,
-  IconKey,
-  IconTrash,
-  IconWorld,
-} from "@tabler/icons-react";
-import { useState } from "react";
-import type { ExtensionSettings } from "../../types";
+	IconExternalLink,
+	IconKey,
+	IconTrash,
+	IconWorld,
+} from '@tabler/icons-react';
+import { useState } from 'react';
+import type { ExtensionSettings } from '../../types';
 
-// Utility function for notifications
 const showNotification = (title: string, message: string) => {
-  console.log(`${title}: ${message}`);
-  if (chrome.notifications) {
-    chrome.notifications.create({
-      type: "basic",
-      iconUrl: "public/logo.png",
-      title,
-      message,
-    });
-  }
+	console.log(`${title}: ${message}`);
+	if (chrome.notifications) {
+		chrome.notifications.create({
+			type: 'basic',
+			iconUrl: 'public/logo.png',
+			title,
+			message,
+		});
+	}
 };
 
 interface SettingsViewProps {
-  settings: ExtensionSettings;
-  onSettingsUpdate: (settings: Partial<ExtensionSettings>) => Promise<void>;
+	settings: ExtensionSettings;
+	onSettingsUpdate: (settings: Partial<ExtensionSettings>) => Promise<void>;
 }
 
 export function SettingsView({
-  settings,
-  onSettingsUpdate,
+	settings,
+	onSettingsUpdate,
 }: SettingsViewProps) {
-  const [mylinksUrl, setMylinksUrl] = useState(settings.mylinksUrl);
-  const [apiKey, setApiKey] = useState(settings.apiKey);
-  const [loading, setLoading] = useState(false);
+	const { openConfirmModal } = useModalContext();
+	const [mylinksUrl, setMylinksUrl] = useState(settings.mylinksUrl);
+	const [apiKey, setApiKey] = useState(settings.apiKey);
+	const [loading, setLoading] = useState(false);
 
-  const handleSave = async () => {
-    try {
-      setLoading(true);
-      await onSettingsUpdate({
-        mylinksUrl,
-        apiKey,
-      });
-    } catch (error) {
-      showNotification(
-        chrome.i18n.getMessage("error"),
-        error instanceof Error ? error.message : "Failed to save settings"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+	const handleSave = async () => {
+		try {
+			setLoading(true);
+			await onSettingsUpdate({
+				mylinksUrl,
+				apiKey,
+			});
+		} catch (error) {
+			showNotification(
+				chrome.i18n.getMessage('error'),
+				error instanceof Error ? error.message : 'Failed to save settings'
+			);
+		} finally {
+			setLoading(false);
+		}
+	};
 
-  const openApiKeyPage = () => {
-    chrome.tabs.create({
-      url: `${mylinksUrl}/user/settings`,
-    });
-  };
+	const openApiKeyPage = () => {
+		chrome.tabs.create({
+			url: `${mylinksUrl}/user/settings`,
+		});
+	};
 
-  const openMyLinks = () => {
-    chrome.tabs.create({
-      url: mylinksUrl,
-    });
-  };
+	const openMyLinks = () => {
+		chrome.tabs.create({
+			url: mylinksUrl,
+		});
+	};
 
-  const handleReset = () => {
-    modals.openConfirmModal({
-      title: "Reset Extension",
-      children: (
-        <Stack gap="md">
-          <Text size="sm">
-            This will completely reset the extension to its initial state:
-          </Text>
-          <List size="sm" c="dimmed">
-            <List.Item>Clear all settings and API key</List.Item>
-            <List.Item>Remove all cached collections</List.Item>
-            <List.Item>Mark extension as uninitialized</List.Item>
-            <List.Item>You will need to go through setup again</List.Item>
-          </List>
-          <Text size="sm" fw={500} c="red">
-            This action cannot be undone!
-          </Text>
-        </Stack>
-      ),
-      labels: { confirm: "Reset Extension", cancel: "Cancel" },
-      confirmProps: { color: "red" },
-      onConfirm: async () => {
-        try {
-          setLoading(true);
+	const handleReset = () => {
+		openConfirmModal({
+			title: 'Reset Extension',
+			children: (
+				<div className="space-y-3">
+					<p className="text-sm text-gray-700 dark:text-gray-300">
+						This will completely reset the extension to its initial state:
+					</p>
+					<ul className="list-disc space-y-1 pl-5 text-sm text-gray-600 dark:text-gray-400">
+						<li>Clear all settings and API key</li>
+						<li>Remove all cached collections</li>
+						<li>Mark extension as uninitialized</li>
+						<li>You will need to go through setup again</li>
+					</ul>
+					<p className="text-sm font-semibold text-red-600 dark:text-red-400">
+						This action cannot be undone!
+					</p>
+				</div>
+			),
+			confirmLabel: 'Reset Extension',
+			cancelLabel: 'Cancel',
+			confirmColor: 'red',
+			onConfirm: async () => {
+				try {
+					setLoading(true);
 
-          // Send reset message to background script
-          const response = await chrome.runtime.sendMessage({
-            type: "RESET_EXTENSION",
-          });
+					const response = await chrome.runtime.sendMessage({
+						type: 'RESET_EXTENSION',
+					});
 
-          if (response.success) {
-            showNotification(
-              "Extension Reset",
-              "Extension has been reset successfully. Please reload the popup."
-            );
+					if (response.success) {
+						showNotification(
+							'Extension Reset',
+							'Extension has been reset successfully. Please reload the popup.'
+						);
 
-            // Reset local state
-            setMylinksUrl("https://www.mylinks.app");
-            setApiKey("");
+						setMylinksUrl('https://www.mylinks.app');
+						setApiKey('');
 
-            // Close popup after a short delay
-            setTimeout(() => {
-              window.close();
-            }, 2000);
-          }
-        } catch (error) {
-          showNotification(
-            "Reset Failed",
-            error instanceof Error ? error.message : "Failed to reset extension"
-          );
-        } finally {
-          setLoading(false);
-        }
-      },
-    });
-  };
+						setTimeout(() => {
+							window.close();
+						}, 2000);
+					}
+				} catch (error) {
+					showNotification(
+						'Reset Failed',
+						error instanceof Error ? error.message : 'Failed to reset extension'
+					);
+				} finally {
+					setLoading(false);
+				}
+			},
+		});
+	};
 
-  return (
-    <Stack gap="md">
-      <Card withBorder>
-        <Stack gap="md">
-          <Title order={4}>{chrome.i18n.getMessage("settings")}</Title>
+	return (
+		<div className="space-y-4">
+			<div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+				<div className="space-y-4">
+					<h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+						{chrome.i18n.getMessage('settings')}
+					</h2>
 
-          <Alert color="blue">
-            <Text size="sm">
-              Configure your MyLinks instance and API key to start using the
-              extension.
-            </Text>
-          </Alert>
+					<div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
+						<p className="text-sm text-blue-800 dark:text-blue-200">
+							Configure your MyLinks instance and API key to start using the
+							extension.
+						</p>
+					</div>
 
-          <TextInput
-            label={chrome.i18n.getMessage("mylinksUrl")}
-            placeholder="https://www.mylinks.app"
-            value={mylinksUrl}
-            onChange={(e) => setMylinksUrl(e.target.value)}
-            leftSection={<IconWorld size={16} />}
-            rightSection={
-              <Button
-                variant="subtle"
-                size="xs"
-                onClick={openMyLinks}
-                leftSection={<IconExternalLink size={14} />}
-              >
-                Open
-              </Button>
-            }
-          />
+					<div>
+						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+							{chrome.i18n.getMessage('mylinksUrl')}
+						</label>
+						<div className="relative">
+							<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+								<IconWorld className="h-4 w-4 text-gray-400" />
+							</div>
+							<input
+								type="text"
+								placeholder="https://www.mylinks.app"
+								value={mylinksUrl}
+								onChange={(e) => setMylinksUrl(e.target.value)}
+								className="w-full rounded-md border border-gray-300 bg-white pl-9 pr-20 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+							/>
+							<div className="absolute inset-y-0 right-0 flex items-center pr-1">
+								<button
+									type="button"
+									onClick={openMyLinks}
+									className="flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+								>
+									<IconExternalLink size={14} />
+									Open
+								</button>
+							</div>
+						</div>
+					</div>
 
-          <TextInput
-            label={chrome.i18n.getMessage("apiKey")}
-            placeholder="Enter your API key"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            type="password"
-            leftSection={<IconKey size={16} />}
-            rightSection={
-              <Button
-                variant="subtle"
-                size="xs"
-                onClick={openApiKeyPage}
-                leftSection={<IconExternalLink size={14} />}
-              >
-                {chrome.i18n.getMessage("getApiKey")}
-              </Button>
-            }
-          />
+					<div>
+						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+							{chrome.i18n.getMessage('apiKey')}
+						</label>
+						<div className="relative">
+							<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+								<IconKey className="h-4 w-4 text-gray-400" />
+							</div>
+							<input
+								type="password"
+								placeholder="Enter your API key"
+								value={apiKey}
+								onChange={(e) => setApiKey(e.target.value)}
+								className="w-full rounded-md border border-gray-300 bg-white pl-9 pr-24 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+							/>
+							<div className="absolute inset-y-0 right-0 flex items-center pr-1">
+								<button
+									type="button"
+									onClick={openApiKeyPage}
+									className="flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+								>
+									<IconExternalLink size={14} />
+									{chrome.i18n.getMessage('getApiKey')}
+								</button>
+							</div>
+						</div>
+					</div>
 
-          <Group justify="space-between">
-            <Button
-              variant="outline"
-              color="red"
-              onClick={handleReset}
-              disabled={loading}
-              leftSection={<IconTrash size={16} />}
-            >
-              Reset Extension
-            </Button>
-            <Button
-              onClick={handleSave}
-              loading={loading}
-              disabled={!mylinksUrl}
-            >
-              {chrome.i18n.getMessage("save")}
-            </Button>
-          </Group>
-        </Stack>
-      </Card>
-    </Stack>
-  );
+					<div className="flex items-center justify-between">
+						<button
+							type="button"
+							onClick={handleReset}
+							disabled={loading}
+							className="flex items-center gap-2 rounded-md border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-50 dark:border-red-600 dark:bg-gray-700 dark:text-red-400 dark:hover:bg-red-900/20"
+						>
+							<IconTrash size={16} />
+							Reset Extension
+						</button>
+						<button
+							type="button"
+							onClick={handleSave}
+							disabled={!mylinksUrl || loading}
+							className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+						>
+							{loading ? 'Loading...' : chrome.i18n.getMessage('save')}
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }

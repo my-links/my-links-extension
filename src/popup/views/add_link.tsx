@@ -1,148 +1,187 @@
-import {
-  Alert,
-  Button,
-  Card,
-  Checkbox,
-  Group,
-  Select,
-  Stack,
-  Text,
-  TextInput,
-  Textarea,
-  Title,
-} from "@mantine/core";
-import { IconArrowLeft, IconLink } from "@tabler/icons-react";
-import { useState } from "react";
-import type { AddLinkRequest, MyLinksCollection } from "../../types";
+import { IconArrowLeft, IconLink } from '@tabler/icons-react';
+import { useState } from 'react';
+import type { AddLinkRequest, MyLinksCollection } from '../../types';
 
 interface AddLinkViewProps {
-  link: { url: string; name: string };
-  collections: MyLinksCollection[];
-  onAddLink: (collectionId: string, link: AddLinkRequest) => Promise<void>;
-  onCancel: () => void;
+	link: { url: string; name: string };
+	collections: MyLinksCollection[];
+	onAddLink: (collectionId: string, link: AddLinkRequest) => Promise<void>;
+	onCancel: () => void;
 }
 
 export function AddLinkView({
-  link,
-  collections,
-  onAddLink,
-  onCancel,
+	link,
+	collections,
+	onAddLink,
+	onCancel,
 }: AddLinkViewProps) {
-  const [formState, setFormState] = useState<AddLinkRequest>({
-    url: link.url,
-    name: link.name,
-    description: "",
-    collectionId: "",
-    favorite: false,
-  });
+	const [formState, setFormState] = useState<AddLinkRequest>({
+		url: link.url,
+		name: link.name,
+		description: '',
+		collectionId: '',
+		favorite: false,
+	});
 
-  const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(false);
 
-  const handleAddLink = async () => {
-    if (!formState.collectionId) return;
+	const handleAddLink = async () => {
+		if (!formState.collectionId) return;
 
-    try {
-      setLoading(true);
-      await onAddLink(formState.collectionId, {
-        name: formState.name.trim(),
-        url: formState.url,
-        description: formState.description?.trim(),
-        favorite: formState.favorite,
-        collectionId: formState.collectionId,
-      });
-    } catch (error) {
-      console.error("Failed to add link:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+		try {
+			setLoading(true);
+			await onAddLink(formState.collectionId, {
+				name: formState.name.trim(),
+				url: formState.url,
+				description: formState.description?.trim(),
+				favorite: formState.favorite,
+				collectionId: formState.collectionId,
+			});
+		} catch (error) {
+			console.error('Failed to add link:', error);
+		} finally {
+			setLoading(false);
+		}
+	};
 
-  const collectionOptions = collections.map((collection) => ({
-    value: String(collection.id),
-    label: collection.name,
-  }));
+	return (
+		<div className="space-y-4">
+			<div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+				<div className="space-y-4">
+					<div>
+						<button
+							type="button"
+							onClick={onCancel}
+							className="flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+						>
+							<IconArrowLeft size={14} />
+							Back
+						</button>
+					</div>
 
-  return (
-    <Stack gap="md">
-      <Card withBorder>
-        <Stack gap="md">
-          <Group>
-            <Button
-              variant="light"
-              size="xs"
-              leftSection={<IconArrowLeft size={14} />}
-              onClick={onCancel}
-            >
-              Back
-            </Button>
-          </Group>
+					<h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+						{chrome.i18n.getMessage('addToCollection')}
+					</h2>
 
-          <Title order={4}>{chrome.i18n.getMessage("addToCollection")}</Title>
+					<div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
+						<p className="text-sm text-blue-800 dark:text-blue-200">
+							Add this page to one of your collections:
+						</p>
+					</div>
 
-          <Alert color="blue">
-            <Text size="sm">Add this page to one of your collections:</Text>
-          </Alert>
+					<div>
+						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+							URL
+						</label>
+						<div className="relative">
+							<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+								<IconLink className="h-4 w-4 text-gray-400" />
+							</div>
+							<input
+								type="text"
+								value={link.url}
+								readOnly
+								className="w-full rounded-md border border-gray-300 bg-gray-50 pl-9 pr-3 py-2 text-sm text-gray-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400"
+							/>
+						</div>
+					</div>
 
-          <TextInput
-            label="URL"
-            value={link.url}
-            readOnly
-            leftSection={<IconLink size={16} />}
-          />
+					<div>
+						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+							Name
+							<span className="text-red-500">*</span>
+						</label>
+						<input
+							type="text"
+							placeholder="Enter link name"
+							value={formState.name}
+							onChange={(e) =>
+								setFormState({ ...formState, name: e.target.value })
+							}
+							className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+						/>
+					</div>
 
-          <TextInput
-            label="Name"
-            placeholder="Enter link name"
-            value={formState.name}
-            onChange={(e) =>
-              setFormState({ ...formState, name: e.target.value })
-            }
-            required
-          />
+					<div>
+						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+							Description
+						</label>
+						<textarea
+							placeholder="Enter link description (optional)"
+							value={formState.description}
+							onChange={(e) =>
+								setFormState({ ...formState, description: e.target.value })
+							}
+							rows={3}
+							className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+						/>
+					</div>
 
-          <Textarea
-            label="Description"
-            placeholder="Enter link description (optional)"
-            value={formState.description}
-            onChange={(e) =>
-              setFormState({ ...formState, description: e.target.value })
-            }
-            rows={3}
-          />
+					<div className="flex items-center">
+						<input
+							type="checkbox"
+							id="favorite"
+							checked={formState.favorite}
+							onChange={(e) =>
+								setFormState({ ...formState, favorite: e.target.checked })
+							}
+							className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+						/>
+						<label
+							htmlFor="favorite"
+							className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+						>
+							Favorite
+						</label>
+					</div>
 
-          <Checkbox
-            label="Favorite"
-            checked={formState.favorite}
-            onChange={(e) =>
-              setFormState({ ...formState, favorite: e.target.checked })
-            }
-          />
+					<div>
+						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+							Collection
+							<span className="text-red-500">*</span>
+						</label>
+						<select
+							value={formState.collectionId}
+							onChange={(e) =>
+								setFormState({ ...formState, collectionId: e.target.value })
+							}
+							className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+						>
+							<option value="">Select a collection</option>
+							{collections.map((collection) => (
+								<option
+									key={String(collection.id)}
+									value={String(collection.id)}
+								>
+									{collection.name}
+								</option>
+							))}
+						</select>
+					</div>
 
-          <Select
-            label="Collection"
-            placeholder="Select a collection"
-            data={collectionOptions}
-            value={formState.collectionId}
-            onChange={(value) =>
-              setFormState({ ...formState, collectionId: value || "" })
-            }
-            required
-          />
-
-          <Group justify="flex-end">
-            <Button variant="light" onClick={onCancel}>
-              {chrome.i18n.getMessage("cancel")}
-            </Button>
-            <Button
-              onClick={handleAddLink}
-              loading={loading}
-              disabled={!formState.collectionId || !formState.name.trim()}
-            >
-              {chrome.i18n.getMessage("addToCollection")}
-            </Button>
-          </Group>
-        </Stack>
-      </Card>
-    </Stack>
-  );
+					<div className="flex justify-end gap-2">
+						<button
+							type="button"
+							onClick={onCancel}
+							className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+						>
+							{chrome.i18n.getMessage('cancel')}
+						</button>
+						<button
+							type="button"
+							onClick={handleAddLink}
+							disabled={
+								!formState.collectionId || !formState.name.trim() || loading
+							}
+							className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+						>
+							{loading
+								? 'Loading...'
+								: chrome.i18n.getMessage('addToCollection')}
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }

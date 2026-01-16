@@ -1,18 +1,15 @@
-import { MantineProvider } from "@mantine/core";
-import "@mantine/core/styles.css";
-import { ModalsProvider } from "@mantine/modals";
-import { createRoot } from "react-dom/client";
-import { PopupApp } from "./app/popup_app";
+import { createRoot } from 'react-dom/client';
+import 'virtual:uno.css';
+import { ModalProvider } from '../components/modals';
+import { PopupApp } from './app/popup_app';
 
-const container = document.getElementById("root");
+const container = document.getElementById('root');
 if (container) {
-  const root = createRoot(container);
+	const root = createRoot(container);
 
-  root.render(
-    <MantineProvider>
-      <ModalsProvider>
-        <PopupApp />
-      </ModalsProvider>
-    </MantineProvider>
-  );
+	root.render(
+		<ModalProvider>
+			<PopupApp />
+		</ModalProvider>
+	);
 }
