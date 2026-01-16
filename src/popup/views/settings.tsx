@@ -1,3 +1,4 @@
+import { ThemeToggle } from '@/components';
 import { useModalContext } from '@/components/modals';
 import {
 	IconExternalLink,
@@ -126,9 +127,12 @@ export function SettingsView({
 		<div className="space-y-4">
 			<div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
 				<div className="space-y-4">
-					<h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-						{chrome.i18n.getMessage('settings')}
-					</h2>
+					<div className="flex items-center justify-between">
+						<h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+							{chrome.i18n.getMessage('settings')}
+						</h2>
+						<ThemeToggle />
+					</div>
 
 					<div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
 						<p className="text-sm text-blue-800 dark:text-blue-200">

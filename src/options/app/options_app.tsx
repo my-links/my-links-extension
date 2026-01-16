@@ -27,31 +27,37 @@ export function OptionsApp() {
 
 	if (!settings?.isInitialized) {
 		return (
-			<div className="mx-auto max-w-2xl py-8">
-				<InitializationView onInitialize={handleInitialize} />
+			<div className="min-h-screen bg-white dark:bg-gray-900">
+				<div className="mx-auto max-w-2xl py-8 px-4">
+					<InitializationView onInitialize={handleInitialize} />
+				</div>
 			</div>
 		);
 	}
 
 	if (pendingLink) {
 		return (
-			<div className="mx-auto max-w-2xl py-8">
-				<AddLinkView
-					link={pendingLink}
-					collections={collections}
-					onAddLink={handleAddLink}
-					onCancel={() => setPendingLink(null)}
-				/>
+			<div className="min-h-screen bg-white dark:bg-gray-900">
+				<div className="mx-auto max-w-2xl py-8 px-4">
+					<AddLinkView
+						link={pendingLink}
+						collections={collections}
+						onAddLink={handleAddLink}
+						onCancel={() => setPendingLink(null)}
+					/>
+				</div>
 			</div>
 		);
 	}
 
 	return (
-		<div className="mx-auto max-w-2xl py-8">
-			<SettingsView
-				settings={settings}
-				onSettingsUpdate={handleSettingsUpdate}
-			/>
+		<div className="min-h-screen bg-white dark:bg-gray-900">
+			<div className="mx-auto max-w-2xl py-8 px-4">
+				<SettingsView
+					settings={settings}
+					onSettingsUpdate={handleSettingsUpdate}
+				/>
+			</div>
 		</div>
 	);
 }
