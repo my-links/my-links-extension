@@ -100,15 +100,6 @@ export type Message = {
 	[key: string]: any;
 };
 
-// UI state types
-export type PopupState = {
-	settings: ExtensionSettings | null;
-	collections: MyLinksCollection[];
-	loading: boolean;
-	error: string | null;
-	pendingLink: PendingLink | null;
-};
-
 export type PendingLink = {
 	url: string;
 	name: string;

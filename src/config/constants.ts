@@ -22,10 +22,6 @@ export const STORAGE_CONFIG = {
 
 // UI Configuration
 export const UI_CONFIG = {
-	POPUP: {
-		WIDTH: 400,
-		HEIGHT: 600,
-	},
 	NOTIFICATIONS: {
 		ICON_URL: 'public/logo.png',
 		DURATION: 5000, // 5 seconds

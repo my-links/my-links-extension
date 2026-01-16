@@ -32,7 +32,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 	}
 });
 
-// Handle messages from popup and content scripts
+// Handle messages from content scripts
 chrome.runtime.onMessage.addListener(
 	(message: Message, sender, sendResponse) => {
 		handleMessage(message, sender, sendResponse);
