@@ -17,9 +17,9 @@ export default defineManifest({
       16: "public/logo.png",
       48: "public/logo.png",
     },
-    default_popup: "src/popup/index.html",
     default_title: "__MSG_extensionName__",
   },
+  options_page: "src/options/index.html",
   permissions: [
     "bookmarks",
     "storage",

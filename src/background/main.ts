@@ -12,10 +12,17 @@ import type {
 
 const SYNC_DELAY_MS = 500;
 
-// Initialize context menus
-chrome.runtime.onInstalled.addListener(async () => {
+chrome.runtime.onInstalled.addListener(async (details) => {
   await setupContextMenus();
   await checkInitialization();
+
+  if (details.reason === "install") {
+    chrome.runtime.openOptionsPage();
+  }
+});
+
+chrome.action.onClicked.addListener(() => {
+  chrome.runtime.openOptionsPage();
 });
 
 // Handle context menu clicks
@@ -169,11 +176,8 @@ async function handleAddToCollection(url: string, name: string) {
       return;
     }
 
-    // Store the link info for the popup to handle
     await StorageService.setPendingLink({ url, name });
-
-    // Open popup or show notification
-    chrome.action.openPopup();
+    chrome.runtime.openOptionsPage();
   } catch (error) {
     console.error("Failed to handle add to collection:", error);
     await NotificationService.showApiError(
