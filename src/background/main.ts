@@ -372,6 +372,12 @@ async function handleResetExtension() {
 	try {
 		console.log('Resetting extension...');
 
+		// Clear all bookmarks from bookmark bar
+		await BookmarksService.clearBookmarkBar();
+
+		// Restore bookmarks from backup folder
+		await BookmarksService.restoreBookmarks();
+
 		// Clear all storage data
 		await StorageService.clearStorage();
 

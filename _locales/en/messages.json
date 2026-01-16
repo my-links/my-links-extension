@@ -199,6 +199,10 @@
     "message": "You will need to go through setup again",
     "description": "Reset extension setup again item"
   },
+  "resetExtensionRestoreBookmarks": {
+    "message": "Remove all favorites from the bookmark bar and restore those from the \"Backup Favorites\" folder",
+    "description": "Reset extension restore bookmarks item"
+  },
   "resetExtensionCannotUndo": {
     "message": "This action cannot be undone!",
     "description": "Reset extension cannot undo warning"

@@ -109,4 +109,89 @@ export class BookmarksService {
 			throw error;
 		}
 	}
+
+	static async clearBookmarkBar(): Promise<void> {
+		try {
+			const bookmarkBar = await chrome.bookmarks.getChildren(
+				BOOKMARK_BAR_FOLDER_ID
+			);
+
+			for (const bookmark of bookmarkBar) {
+				await chrome.bookmarks.removeTree(bookmark.id);
+			}
+
+			console.log('Bookmark bar cleared successfully');
+		} catch (error) {
+			console.error('Failed to clear bookmark bar:', error);
+			throw error;
+		}
+	}
+
+	private static findBackupFolder(
+		bookmarks: chrome.bookmarks.BookmarkTreeNode[]
+	): chrome.bookmarks.BookmarkTreeNode | null {
+		for (const bookmark of bookmarks) {
+			if (bookmark.title === this.BACKUP_FOLDER_NAME) {
+				return bookmark;
+			}
+			if (bookmark.children) {
+				const found = this.findBackupFolder(bookmark.children);
+				if (found) return found;
+			}
+		}
+		return null;
+	}
+
+	private static async restoreBookmarkRecursive(
+		bookmark: chrome.bookmarks.BookmarkTreeNode,
+		parentId: string
+	): Promise<void> {
+		if (bookmark.url) {
+			await chrome.bookmarks.create({
+				parentId,
+				title: bookmark.title,
+				url: bookmark.url,
+			});
+		} else if (bookmark.children) {
+			const folder = await chrome.bookmarks.create({
+				parentId,
+				title: bookmark.title,
+			});
+
+			for (const child of bookmark.children) {
+				await this.restoreBookmarkRecursive(child, folder.id);
+			}
+		}
+	}
+
+	static async restoreBookmarks(): Promise<void> {
+		try {
+			const bookmarks = await chrome.bookmarks.getTree();
+			const backupFolder = this.findBackupFolder(bookmarks);
+
+			if (!backupFolder) {
+				console.log('No backup folder found, nothing to restore');
+				return;
+			}
+
+			if (!backupFolder.children || backupFolder.children.length === 0) {
+				console.log('Backup folder is empty, nothing to restore');
+				return;
+			}
+
+			for (const bookmark of backupFolder.children) {
+				await this.restoreBookmarkRecursive(
+					bookmark,
+					BOOKMARK_BAR_FOLDER_ID
+				);
+			}
+
+			await chrome.bookmarks.removeTree(backupFolder.id);
+
+			console.log('Bookmarks restored successfully');
+		} catch (error) {
+			console.error('Failed to restore bookmarks:', error);
+			throw error;
+		}
+	}
 }

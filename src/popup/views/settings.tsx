@@ -77,6 +77,7 @@ export function SettingsView({
 					<ul className="list-disc space-y-1 pl-5 text-sm text-gray-600 dark:text-gray-400">
 						<li>{chrome.i18n.getMessage('resetExtensionClearSettings')}</li>
 						<li>{chrome.i18n.getMessage('resetExtensionRemoveCollections')}</li>
+						<li>{chrome.i18n.getMessage('resetExtensionRestoreBookmarks')}</li>
 						<li>{chrome.i18n.getMessage('resetExtensionMarkUninitialized')}</li>
 						<li>{chrome.i18n.getMessage('resetExtensionSetupAgain')}</li>
 					</ul>

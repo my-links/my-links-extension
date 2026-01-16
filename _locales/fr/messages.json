@@ -199,6 +199,10 @@
 		"message": "Vous devrez refaire la configuration",
 		"description": "Élément réinitialisation refaire configuration"
 	},
+	"resetExtensionRestoreBookmarks": {
+		"message": "Supprimer tous les favoris de la barre des favoris et restaurer ceux du dossier \"Backup Favorites\"",
+		"description": "Élément réinitialisation restaurer favoris"
+	},
 	"resetExtensionCannotUndo": {
 		"message": "Cette action ne peut pas être annulée !",
 		"description": "Avertissement réinitialisation ne peut pas être annulée"
