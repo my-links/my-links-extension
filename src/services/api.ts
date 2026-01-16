@@ -97,6 +97,10 @@ export class MyLinksAPI {
 		return this.request<MyLinksCollection[]>('/collections');
 	}
 
+	async getFavorites(): Promise<ApiResponse<MyLinksLink[]>> {
+		return this.request<MyLinksLink[]>('/links/favorites');
+	}
+
 	async createCollection(
 		collection: CreateCollectionRequest
 	): Promise<ApiResponse<MyLinksCollection>> {

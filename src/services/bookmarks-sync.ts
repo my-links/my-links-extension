@@ -7,17 +7,21 @@ const BOOKMARK_BAR_FOLDER_ID = '1';
 export class BookmarksSyncService {
 	private static readonly BACKUP_FOLDER_NAME = 'Backup Favorites';
 	private static readonly COLLECTION_PREFIX = '📁 ';
+	private static readonly FAVORITES_FOLDER_NAME_EN = 'Favorites';
+	private static readonly FAVORITES_FOLDER_NAME_FR = 'Favoris';
+	private static readonly FAVORITES_STAR = '⭐';
 
 	/**
-	 * Synchronize collections with browser bookmarks
+	 * Synchronize favorites and collections with browser bookmarks
 	 */
-	static async syncCollectionsToBookmarks(
+	static async syncToBookmarks(
+		favorites: MyLinksLink[],
 		collections: MyLinksCollection[]
 	): Promise<void> {
 		try {
 			logger.info('Starting bookmarks synchronization', 'BOOKMARKS_SYNC');
 			logger.info(
-				`Collections to sync: ${collections.length}`,
+				`Favorites to sync: ${favorites.length}, Collections to sync: ${collections.length}`,
 				'BOOKMARKS_SYNC'
 			);
 
@@ -49,8 +53,14 @@ export class BookmarksSyncService {
 				);
 			}
 
-			// Remove existing collection folders from bookmark bar
-			await this.cleanupCollectionFolders(BOOKMARK_BAR_FOLDER_ID);
+			// Remove existing collection folders and favorites from bookmark bar
+			await this.cleanupCollectionFolders(BOOKMARK_BAR_FOLDER_ID, collections);
+			await this.cleanupFavorites(BOOKMARK_BAR_FOLDER_ID);
+
+			// Sync favorites first (before collections)
+			if (favorites.length > 0) {
+				await this.createFavoritesFolder(favorites, BOOKMARK_BAR_FOLDER_ID);
+			}
 
 			// Create collection folders and add links in bookmark bar
 			for (const collection of collections) {
@@ -58,17 +68,22 @@ export class BookmarksSyncService {
 			}
 
 			logger.info(
-				`Synchronized ${collections.length} collections`,
+				`Synchronized ${favorites.length} favorites and ${collections.length} collections`,
 				'BOOKMARKS_SYNC'
 			);
 		} catch (error) {
-			logger.error(
-				'Failed to sync collections to bookmarks',
-				'BOOKMARKS_SYNC',
-				error
-			);
+			logger.error('Failed to sync to bookmarks', 'BOOKMARKS_SYNC', error);
 			throw error;
 		}
+	}
+
+	/**
+	 * Synchronize collections with browser bookmarks (legacy method for backward compatibility)
+	 */
+	static async syncCollectionsToBookmarks(
+		collections: MyLinksCollection[]
+	): Promise<void> {
+		return this.syncToBookmarks([], collections);
 	}
 
 	/**
@@ -84,10 +99,13 @@ export class BookmarksSyncService {
 				'BOOKMARKS_SYNC'
 			);
 
+			const icon = collection.icon || this.COLLECTION_PREFIX.trim();
+			const folderTitle = `${icon} ${collection.name}`;
+
 			// Create collection folder
 			const folder = await chrome.bookmarks.create({
 				parentId,
-				title: `${this.COLLECTION_PREFIX}${collection.name}`,
+				title: folderTitle,
 				url: undefined,
 			});
 
@@ -124,13 +142,23 @@ export class BookmarksSyncService {
 	 * Remove existing collection folders (except backup)
 	 */
 	private static async cleanupCollectionFolders(
-		parentId: string
+		parentId: string,
+		collections: MyLinksCollection[]
 	): Promise<void> {
 		try {
 			const children = await chrome.bookmarks.getChildren(parentId);
+			const collectionNames = new Set(
+				collections.map((c) => c.name.toLowerCase())
+			);
 
 			for (const child of children) {
-				if (child.title?.startsWith(this.COLLECTION_PREFIX)) {
+				const title = child.title || '';
+				const titleWithoutIcon = title.replace(/^[^\s]+\s?/, '').trim();
+
+				if (
+					title.startsWith(this.COLLECTION_PREFIX) ||
+					collectionNames.has(titleWithoutIcon.toLowerCase())
+				) {
 					await chrome.bookmarks.removeTree(child.id);
 					logger.debug(
 						`Removed existing collection folder: ${child.title}`,
@@ -141,6 +169,83 @@ export class BookmarksSyncService {
 		} catch (error) {
 			logger.error(
 				'Failed to cleanup collection folders',
+				'BOOKMARKS_SYNC',
+				error
+			);
+			throw error;
+		}
+	}
+
+	/**
+	 * Remove existing favorites folder
+	 */
+	private static async cleanupFavorites(parentId: string): Promise<void> {
+		try {
+			const children = await chrome.bookmarks.getChildren(parentId);
+
+			for (const child of children) {
+				const title = child.title || '';
+				const favoritesFolderName = this.getFavoritesFolderName();
+				if (
+					title === this.FAVORITES_FOLDER_NAME_EN ||
+					title === this.FAVORITES_FOLDER_NAME_FR ||
+					title === favoritesFolderName ||
+					title === `${this.FAVORITES_STAR} ${this.FAVORITES_FOLDER_NAME_EN}` ||
+					title === `${this.FAVORITES_STAR} ${this.FAVORITES_FOLDER_NAME_FR}`
+				) {
+					await chrome.bookmarks.removeTree(child.id);
+					logger.debug(
+						`Removed existing favorites folder: ${child.title}`,
+						'BOOKMARKS_SYNC'
+					);
+				}
+			}
+		} catch (error) {
+			logger.error('Failed to cleanup favorites', 'BOOKMARKS_SYNC', error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Get favorites folder name based on UI language
+	 */
+	private static getFavoritesFolderName(): string {
+		const uiLanguage = chrome.i18n.getUILanguage();
+		const baseName =
+			uiLanguage.startsWith('fr') || uiLanguage.startsWith('FR')
+				? this.FAVORITES_FOLDER_NAME_FR
+				: this.FAVORITES_FOLDER_NAME_EN;
+		return `${this.FAVORITES_STAR} ${baseName}`;
+	}
+
+	/**
+	 * Create favorites folder with all favorites inside
+	 */
+	private static async createFavoritesFolder(
+		favorites: MyLinksLink[],
+		parentId: string
+	): Promise<void> {
+		try {
+			const favoritesFolder = await chrome.bookmarks.create({
+				parentId,
+				title: this.getFavoritesFolderName(),
+			});
+
+			for (const favorite of favorites) {
+				await chrome.bookmarks.create({
+					parentId: favoritesFolder.id,
+					title: favorite.name,
+					url: favorite.url,
+				});
+			}
+
+			logger.info(
+				`Created favorites folder with ${favorites.length} favorites`,
+				'BOOKMARKS_SYNC'
+			);
+		} catch (error) {
+			logger.error(
+				'Failed to create favorites folder',
 				'BOOKMARKS_SYNC',
 				error
 			);
@@ -362,7 +467,9 @@ export class BookmarksSyncService {
 		const children = await chrome.bookmarks.getChildren(parentId);
 
 		for (const child of children) {
-			if (child.title === `${this.COLLECTION_PREFIX}${collectionName}`) {
+			const title = child.title || '';
+			const titleWithoutIcon = title.replace(/^[^\s]+\s?/, '').trim();
+			if (titleWithoutIcon === collectionName) {
 				return child;
 			}
 		}

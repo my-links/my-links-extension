@@ -180,10 +180,7 @@ export class BookmarksService {
 			}
 
 			for (const bookmark of backupFolder.children) {
-				await this.restoreBookmarkRecursive(
-					bookmark,
-					BOOKMARK_BAR_FOLDER_ID
-				);
+				await this.restoreBookmarkRecursive(bookmark, BOOKMARK_BAR_FOLDER_ID);
 			}
 
 			await chrome.bookmarks.removeTree(backupFolder.id);

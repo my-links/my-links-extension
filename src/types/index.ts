@@ -14,6 +14,7 @@ export type MyLinksCollection = {
 	createdAt: string;
 	updatedAt: string;
 	links: MyLinksLink[];
+	icon?: string;
 };
 
 export type MyLinksLink = {

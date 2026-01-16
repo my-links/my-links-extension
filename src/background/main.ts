@@ -145,22 +145,31 @@ async function syncCollections() {
 		}
 
 		const api = new MyLinksAPI(settings.mylinksUrl, settings.apiKey);
-		const response = await api.getCollections();
+		const collectionsResponse = await api.getCollections();
+		const favoritesResponse = await api.getFavorites();
 
-		if (response.success && response.data) {
+		if (collectionsResponse.success && collectionsResponse.data) {
 			// Handle both cases: direct array or { collections: [] } object
-			const collections = Array.isArray(response.data)
-				? response.data
-				: (response.data as any).collections || [];
+			const collections = Array.isArray(collectionsResponse.data)
+				? collectionsResponse.data
+				: (collectionsResponse.data as any).collections || [];
 
 			await StorageService.setCollections(collections);
 			await StorageService.updateCache(collections);
 			await StorageService.setSettings({ lastSync: new Date().toISOString() });
 
-			// Sync with bookmarks
-			await BookmarksSyncService.syncCollectionsToBookmarks(collections);
+			// Get favorites
+			const favorites =
+				favoritesResponse.success && favoritesResponse.data
+					? Array.isArray(favoritesResponse.data)
+						? favoritesResponse.data
+						: []
+					: [];
 
-			console.log('Collections synced successfully');
+			// Sync with bookmarks (favorites first, then collections)
+			await BookmarksSyncService.syncToBookmarks(favorites, collections);
+
+			console.log('Collections and favorites synced successfully');
 		}
 	} catch (error) {
 		console.error('Failed to sync collections:', error);
@@ -249,6 +258,7 @@ async function handleMessage(
 
 			case 'UPDATE_SETTINGS':
 				await StorageService.setSettings(message.settings);
+				scheduleSync(SYNC_DELAY_MS);
 				sendResponse({ success: true });
 				break;
 
