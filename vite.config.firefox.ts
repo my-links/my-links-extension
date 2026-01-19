@@ -1,10 +1,10 @@
-import path from 'node:path';
 import { crx } from '@crxjs/vite-plugin';
 import react from '@vitejs/plugin-react';
+import path from 'node:path';
 import UnoCSS from 'unocss/vite';
 import { defineConfig } from 'vite';
 import zip from 'vite-plugin-zip-pack';
-import manifest from './manifest.chrome.js';
+import manifest from './manifest.firefox.js';
 import { name, version } from './package.json';
 
 export default defineConfig({
@@ -17,7 +17,7 @@ export default defineConfig({
 		react(),
 		UnoCSS(),
 		crx({ manifest }),
-		zip({ outDir: 'release', outFileName: `crx-${name}-${version}.zip` }),
+		zip({ outDir: 'release', outFileName: `xpi-${name}-${version}.zip` }),
 	],
 	server: {
 		cors: {

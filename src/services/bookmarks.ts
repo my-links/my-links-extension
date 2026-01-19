@@ -1,15 +1,130 @@
-const BOOKMARK_BAR_FOLDER_ID = '1';
-const OTHER_BOOKMARKS_FOLDER_ID = '2';
-
 export class BookmarksService {
 	private static readonly BACKUP_FOLDER_NAME = 'Backup Favorites';
 
+	/**
+	 * Get the bookmark bar folder ID dynamically (works for both Chrome and Firefox)
+	 */
+	private static async getBookmarkBarFolderId(): Promise<string> {
+		const tree = await chrome.bookmarks.getTree();
+		if (!tree || tree.length === 0) {
+			throw new Error('Unable to access bookmarks tree');
+		}
+		const root = tree[0];
+		if (!root || !root.children || root.children.length === 0) {
+			throw new Error('Bookmarks tree root has no children');
+		}
+
+		// Exclude menu bookmarks folder (not the toolbar)
+		const menuBookmarksNames = [
+			'Menu des marque-pages',
+			'Bookmarks Menu',
+			'Bookmark Menu',
+			'menu________',
+		];
+
+		// Try multiple ways to find the bookmark bar
+		// 1. By ID '1' (Chrome)
+		// 2. By common English names
+		// 3. By common French names
+		// 4. By Firefox internal ID pattern (ends with 'toolbar_____')
+		// 5. Exclude menu bookmarks explicitly
+		let bookmarkBar = root.children.find(
+			(child) =>
+				child.id === '1' ||
+				child.title === 'Bookmarks Toolbar' ||
+				child.title === 'Bookmark Toolbar' ||
+				child.title === 'Barre de favoris' ||
+				child.id === 'toolbar_____' ||
+				(child.id && child.id.endsWith('toolbar_____'))
+		);
+
+		// If not found, try to find by excluding menu bookmarks
+		if (!bookmarkBar) {
+			bookmarkBar = root.children.find(
+				(child) => !menuBookmarksNames.includes(child.title || '')
+			);
+		}
+
+		// Last resort: use first child that is not menu bookmarks
+		if (!bookmarkBar) {
+			bookmarkBar = root.children[0];
+		}
+
+		if (!bookmarkBar || !bookmarkBar.id) {
+			throw new Error(
+				`Bookmark bar folder not found. Available folders: ${root.children.map((c) => c.title).join(', ')}`
+			);
+		}
+
+		return bookmarkBar.id;
+	}
+
+	/**
+	 * Get the backup folder parent ID (Other Bookmarks for Chrome, Menu des marque-pages for Firefox)
+	 */
+	private static async getOtherBookmarksFolderId(): Promise<string> {
+		const tree = await chrome.bookmarks.getTree();
+		if (!tree || tree.length === 0) {
+			throw new Error('Unable to access bookmarks tree');
+		}
+		const root = tree[0];
+		if (!root || !root.children || root.children.length === 0) {
+			throw new Error('Bookmarks tree root has no children');
+		}
+
+		// On Firefox, prefer "Menu des marque-pages" / "Bookmarks Menu"
+		// On Chrome, use "Other Bookmarks"
+		const menuBookmarksNames = [
+			'Menu des marque-pages',
+			'Bookmarks Menu',
+			'Bookmark Menu',
+			'menu________',
+		];
+
+		// First try to find menu bookmarks (Firefox)
+		let otherBookmarks = root.children.find(
+			(child) =>
+				menuBookmarksNames.includes(child.title || '') ||
+				(child.id && child.id.endsWith('menu________'))
+		);
+
+		// If not found, try Chrome's "Other Bookmarks"
+		if (!otherBookmarks) {
+			otherBookmarks = root.children.find(
+				(child) =>
+					child.id === '2' ||
+					child.title === 'Other Bookmarks' ||
+					child.title === 'Autres favoris' ||
+					child.title === 'unfiled_____'
+			);
+		}
+
+		// Fallback to second child if available
+		if (!otherBookmarks && root.children.length > 1) {
+			otherBookmarks = root.children[1];
+		}
+
+		// Last resort: use first child
+		if (!otherBookmarks) {
+			otherBookmarks = root.children[0];
+		}
+
+		if (!otherBookmarks || !otherBookmarks.id) {
+			throw new Error(
+				`Backup folder parent not found. Available folders: ${root.children.map((c) => c.title).join(', ')}`
+			);
+		}
+
+		return otherBookmarks.id;
+	}
+
 	static async backupBookmarks(): Promise<void> {
 		try {
+			const bookmarkBarId = await this.getBookmarkBarFolderId();
+			const otherBookmarksId = await this.getOtherBookmarksFolderId();
+
 			// Get all bookmarks from the bookmark bar
-			const bookmarkBar = await chrome.bookmarks.getChildren(
-				BOOKMARK_BAR_FOLDER_ID
-			);
+			const bookmarkBar = await chrome.bookmarks.getChildren(bookmarkBarId);
 
 			// Check if there are any bookmarks or folders to backup (excluding the backup folder itself)
 			const itemsToBackup = bookmarkBar.filter(
@@ -23,7 +138,7 @@ export class BookmarksService {
 
 			// Create backup folder
 			const backupFolder = await chrome.bookmarks.create({
-				parentId: OTHER_BOOKMARKS_FOLDER_ID,
+				parentId: otherBookmarksId,
 				title: this.BACKUP_FOLDER_NAME,
 			});
 
@@ -43,9 +158,8 @@ export class BookmarksService {
 
 	static async hasBookmarksToBackup(): Promise<boolean> {
 		try {
-			const bookmarkBar = await chrome.bookmarks.getChildren(
-				BOOKMARK_BAR_FOLDER_ID
-			);
+			const bookmarkBarId = await this.getBookmarkBarFolderId();
+			const bookmarkBar = await chrome.bookmarks.getChildren(bookmarkBarId);
 			const itemsToBackup = bookmarkBar.filter(
 				(bookmark: any) => bookmark.title !== this.BACKUP_FOLDER_NAME
 			);
@@ -60,9 +174,8 @@ export class BookmarksService {
 		chrome.bookmarks.BookmarkTreeNode[]
 	> {
 		try {
-			const bookmarkBar = await chrome.bookmarks.getChildren(
-				BOOKMARK_BAR_FOLDER_ID
-			);
+			const bookmarkBarId = await this.getBookmarkBarFolderId();
+			const bookmarkBar = await chrome.bookmarks.getChildren(bookmarkBarId);
 			return bookmarkBar.filter(
 				(bookmark: any) => bookmark.title !== this.BACKUP_FOLDER_NAME
 			);
@@ -75,8 +188,11 @@ export class BookmarksService {
 	static async addToBookmarkBar(
 		title: string,
 		url: string,
-		parentId: string = BOOKMARK_BAR_FOLDER_ID
+		parentId?: string
 	): Promise<chrome.bookmarks.BookmarkTreeNode> {
+		if (!parentId) {
+			parentId = await this.getBookmarkBarFolderId();
+		}
 		try {
 			return await chrome.bookmarks.create({
 				parentId,
@@ -112,9 +228,13 @@ export class BookmarksService {
 
 	static async clearBookmarkBar(): Promise<void> {
 		try {
-			const bookmarkBar = await chrome.bookmarks.getChildren(
-				BOOKMARK_BAR_FOLDER_ID
-			);
+			const bookmarkBarId = await this.getBookmarkBarFolderId();
+			const bookmarkBar = await chrome.bookmarks.getChildren(bookmarkBarId);
+
+			if (!bookmarkBar || bookmarkBar.length === 0) {
+				console.log('Bookmark bar is already empty');
+				return;
+			}
 
 			for (const bookmark of bookmarkBar) {
 				await chrome.bookmarks.removeTree(bookmark.id);
@@ -179,8 +299,9 @@ export class BookmarksService {
 				return;
 			}
 
+			const bookmarkBarId = await this.getBookmarkBarFolderId();
 			for (const bookmark of backupFolder.children) {
-				await this.restoreBookmarkRecursive(bookmark, BOOKMARK_BAR_FOLDER_ID);
+				await this.restoreBookmarkRecursive(bookmark, bookmarkBarId);
 			}
 
 			await chrome.bookmarks.removeTree(backupFolder.id);

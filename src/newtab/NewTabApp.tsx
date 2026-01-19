@@ -17,11 +17,12 @@ export function NewTabApp() {
 			const response = await chrome.runtime.sendMessage({
 				type: 'GET_SETTINGS',
 			});
-			if (response.success && response.settings.mylinksUrl) {
-				setMylinksUrl(response.settings.mylinksUrl);
+			if (response && response.success && response.data?.mylinksUrl) {
+				setMylinksUrl(response.data.mylinksUrl);
 			}
 		} catch (err) {
 			console.error('Failed to load settings:', err);
+			setError('Failed to load settings');
 		} finally {
 			setLoading(false);
 		}

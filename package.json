@@ -4,8 +4,13 @@
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
-		"dev": "vite",
-		"build": "tsc -b && vite build",
+		"dev": "vite --config vite.config.ts",
+		"dev:chrome": "vite --config vite.config.chrome.ts",
+		"dev:firefox": "vite --config vite.config.firefox.ts",
+		"build": "tsc -b && vite build --config vite.config.chrome.ts",
+		"build:chrome": "tsc -b && vite build --config vite.config.chrome.ts",
+		"build:firefox": "tsc -b && vite build --config vite.config.firefox.ts",
+		"build:all": "pnpm run build:chrome && pnpm run build:firefox",
 		"preview": "vite preview",
 		"format": "prettier --write --parser typescript '**/*.{ts,tsx}'"
 	},

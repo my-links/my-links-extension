@@ -1,15 +1,81 @@
 import type { MyLinksCollection, MyLinksLink } from '../types';
 import { logger } from './logger';
 
-const OTHER_BOOKMARKS_FOLDER_ID = '2';
-const BOOKMARK_BAR_FOLDER_ID = '1';
-
 export class BookmarksSyncService {
 	private static readonly BACKUP_FOLDER_NAME = 'Backup Favorites';
 	private static readonly COLLECTION_PREFIX = '📁 ';
 	private static readonly FAVORITES_FOLDER_NAME_EN = 'Favorites';
 	private static readonly FAVORITES_FOLDER_NAME_FR = 'Favoris';
 	private static readonly FAVORITES_STAR = '⭐';
+
+	/**
+	 * Get the bookmark bar folder ID dynamically (works for both Chrome and Firefox)
+	 */
+	private static async getBookmarkBarFolderId(): Promise<string> {
+		const tree = await chrome.bookmarks.getTree();
+		if (!tree || tree.length === 0) {
+			throw new Error('Unable to access bookmarks tree');
+		}
+		const root = tree[0];
+		if (!root || !root.children || root.children.length === 0) {
+			throw new Error('Bookmarks tree root has no children');
+		}
+
+		// Log available folders for debugging
+		logger.debug(
+			`Available bookmark folders: ${root.children.map((c) => `${c.id}:${c.title}`).join(', ')}`,
+			'BOOKMARKS_SYNC'
+		);
+
+		// Exclude menu bookmarks folder (not the toolbar)
+		const menuBookmarksNames = [
+			'Menu des marque-pages',
+			'Bookmarks Menu',
+			'Bookmark Menu',
+			'menu________',
+		];
+
+		// Try multiple ways to find the bookmark bar
+		// 1. By ID '1' (Chrome)
+		// 2. By common English names
+		// 3. By common French names
+		// 4. By Firefox internal ID pattern (ends with 'toolbar_____')
+		// 5. Exclude menu bookmarks explicitly
+		let bookmarkBar = root.children.find(
+			(child) =>
+				child.id === '1' ||
+				child.title === 'Bookmarks Toolbar' ||
+				child.title === 'Bookmark Toolbar' ||
+				child.title === 'Barre de favoris' ||
+				child.id === 'toolbar_____' ||
+				(child.id && child.id.endsWith('toolbar_____'))
+		);
+
+		// If not found, try to find by excluding menu bookmarks
+		if (!bookmarkBar) {
+			bookmarkBar = root.children.find(
+				(child) => !menuBookmarksNames.includes(child.title || '')
+			);
+		}
+
+		// Last resort: use first child that is not menu bookmarks
+		if (!bookmarkBar) {
+			bookmarkBar = root.children[0];
+		}
+
+		if (!bookmarkBar || !bookmarkBar.id) {
+			throw new Error(
+				`Bookmark bar folder not found. Available folders: ${root.children.map((c) => c.title).join(', ')}`
+			);
+		}
+
+		logger.debug(
+			`Found bookmark bar folder: ${bookmarkBar.id} - ${bookmarkBar.title}`,
+			'BOOKMARKS_SYNC'
+		);
+
+		return bookmarkBar.id;
+	}
 
 	/**
 	 * Synchronize favorites and collections with browser bookmarks
@@ -29,42 +95,27 @@ export class BookmarksSyncService {
 			const bookmarks = await chrome.bookmarks.getTree();
 			logger.info('Retrieved bookmarks tree', 'BOOKMARKS_SYNC');
 
-			let backupFolder = this.findBackupFolder(bookmarks);
+			// Find backup folder if it exists (don't create it here - it should only be created during initialization if needed)
+			const backupFolder = this.findBackupFolder(bookmarks);
 			logger.info(
 				`Backup folder found: ${backupFolder ? 'yes' : 'no'}`,
 				'BOOKMARKS_SYNC'
 			);
 
-			if (!backupFolder) {
-				logger.warn(
-					'Backup folder not found, creating it...',
-					'BOOKMARKS_SYNC'
-				);
-
-				// Create backup folder if it doesn't exist
-				backupFolder = await chrome.bookmarks.create({
-					parentId: OTHER_BOOKMARKS_FOLDER_ID,
-					title: this.BACKUP_FOLDER_NAME,
-				});
-
-				logger.info(
-					`Created backup folder: ${backupFolder.title}`,
-					'BOOKMARKS_SYNC'
-				);
-			}
+			const bookmarkBarId = await this.getBookmarkBarFolderId();
 
 			// Remove existing collection folders and favorites from bookmark bar
-			await this.cleanupCollectionFolders(BOOKMARK_BAR_FOLDER_ID, collections);
-			await this.cleanupFavorites(BOOKMARK_BAR_FOLDER_ID);
+			await this.cleanupCollectionFolders(bookmarkBarId, collections);
+			await this.cleanupFavorites(bookmarkBarId);
 
 			// Sync favorites first (before collections)
 			if (favorites.length > 0) {
-				await this.createFavoritesFolder(favorites, BOOKMARK_BAR_FOLDER_ID);
+				await this.createFavoritesFolder(favorites, bookmarkBarId);
 			}
 
 			// Create collection folders and add links in bookmark bar
 			for (const collection of collections) {
-				await this.createCollectionFolder(collection, BOOKMARK_BAR_FOLDER_ID);
+				await this.createCollectionFolder(collection, bookmarkBarId);
 			}
 
 			logger.info(
@@ -302,10 +353,12 @@ export class BookmarksSyncService {
 				return;
 			}
 
+			const bookmarkBarId = await this.getBookmarkBarFolderId();
+
 			// Find or create collection folder in bookmark bar
 			const collectionFolder = await this.findOrCreateCollectionFolder(
 				collectionName,
-				BOOKMARK_BAR_FOLDER_ID
+				bookmarkBarId
 			);
 
 			// Add the link
@@ -341,10 +394,12 @@ export class BookmarksSyncService {
 				return;
 			}
 
+			const bookmarkBarId = await this.getBookmarkBarFolderId();
+
 			// Find collection folder in bookmark bar
 			const collectionFolder = await this.findCollectionFolder(
 				collectionName,
-				BOOKMARK_BAR_FOLDER_ID
+				bookmarkBarId
 			);
 
 			if (!collectionFolder) {
@@ -395,10 +450,12 @@ export class BookmarksSyncService {
 				return;
 			}
 
+			const bookmarkBarId = await this.getBookmarkBarFolderId();
+
 			// Find collection folder in bookmark bar
 			const collectionFolder = await this.findCollectionFolder(
 				collectionName,
-				BOOKMARK_BAR_FOLDER_ID
+				bookmarkBarId
 			);
 
 			if (!collectionFolder) {
@@ -495,9 +552,10 @@ export class BookmarksSyncService {
 				return;
 			}
 
+			const bookmarkBarId = await this.getBookmarkBarFolderId();
 			const collectionFolder = await this.findCollectionFolder(
 				collectionName,
-				BOOKMARK_BAR_FOLDER_ID
+				bookmarkBarId
 			);
 
 			if (collectionFolder) {
