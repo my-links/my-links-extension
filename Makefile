@@ -9,3 +9,6 @@ preview:
 
 dev:
 	@pnpm run dev
+
+release:
+	@pnpm run release
