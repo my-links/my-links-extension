@@ -1,12 +1,18 @@
 import { defineManifest } from '@crxjs/vite-plugin';
 import pkg from './package.json';
 
+const firefoxAddonId = process.env.FIREFOX_ADDON_ID;
+const browserSpecificSettings = firefoxAddonId
+	? { browser_specific_settings: { gecko: { id: firefoxAddonId } } }
+	: {};
+
 export default defineManifest({
 	manifest_version: 3,
 	name: '__MSG_extensionName__',
 	description: '__MSG_extensionDescription__',
 	version: pkg.version,
 	default_locale: 'en',
+	...browserSpecificSettings,
 	icons: {
 		16: 'public/logo.png',
 		48: 'public/logo.png',
