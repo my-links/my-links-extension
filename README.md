@@ -30,19 +30,32 @@ Build artifacts are generated in `release/`.
 
 ### CI
 
-The workflow `CI` runs on each pull request and on pushes to `main`. It builds Chrome and Firefox packages and uploads `release/*.zip` as workflow artifacts.
+The `CI` workflow builds and tests the extension for:
+
+- pull requests
+- pushes to `main`
+- tag pushes matching `v*`
+- published GitHub releases
+- manual runs (`workflow_dispatch`)
+
+It builds Chrome and Firefox packages and uploads `release/*.zip` as workflow artifacts.
 
 ### Release
 
-The workflow `Release` runs on:
+Release publishing is handled by the `publish` job inside the same `CI` workflow.
 
-- `workflow_dispatch`
-- tag pushes matching `v*`
+The `publish` job:
 
-It builds and publishes:
+- depends on the `build` job (`needs: build`)
+- only runs for:
+  - manual runs (`workflow_dispatch`)
+  - published GitHub releases
+  - tag pushes starting with `v`
 
-- Chrome: uploads and publishes to Chrome Web Store using the Web Store API
-- Firefox: signs/uploads to AMO using `web-ext sign --channel=listed`
+When it runs, it:
+
+- uploads and publishes the Chrome build to the Chrome Web Store using the Web Store API
+- signs/uploads the Firefox build to AMO using `web-ext sign --channel=listed`
 
 ### Required secrets
 
