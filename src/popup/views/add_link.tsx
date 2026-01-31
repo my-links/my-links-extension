@@ -1,4 +1,4 @@
-import { IconArrowLeft, IconLink } from '@tabler/icons-react';
+import { BASE_INPUT_STYLES, Button, Input, Textarea } from '@minimalstuff/ui';
 import { useState } from 'react';
 import type { AddLinkRequest, MyLinksCollection } from '../../types';
 
@@ -48,16 +48,16 @@ export function AddLinkView({
 		<div className="space-y-4">
 			<div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
 				<div className="space-y-4">
-					<div>
-						<button
-							type="button"
-							onClick={onCancel}
-							className="flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-						>
-							<IconArrowLeft size={14} />
-							{chrome.i18n.getMessage('back')}
-						</button>
-					</div>
+					<Button
+						type="button"
+						variant="outline"
+						size="sm"
+						onClick={onCancel}
+						className="gap-1"
+					>
+						<span className="i-tabler-arrow-left size-4" />
+						{chrome.i18n.getMessage('back')}
+					</Button>
 
 					<h2 className="text-lg font-semibold text-gray-900 dark:text-white">
 						{chrome.i18n.getMessage('addToCollection')}
@@ -73,49 +73,32 @@ export function AddLinkView({
 						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
 							{chrome.i18n.getMessage('url')}
 						</label>
-						<div className="relative">
-							<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-								<IconLink className="h-4 w-4 text-gray-400" />
-							</div>
-							<input
-								type="text"
-								value={link.url}
-								readOnly
-								className="w-full rounded-md border border-gray-300 bg-gray-50 pl-9 pr-3 py-2 text-sm text-gray-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400"
-							/>
-						</div>
-					</div>
-
-					<div>
-						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-							{chrome.i18n.getMessage('name')}
-							<span className="text-red-500">*</span>
-						</label>
 						<input
 							type="text"
-							placeholder={chrome.i18n.getMessage('linkNamePlaceholder')}
-							value={formState.name}
-							onChange={(e) =>
-								setFormState({ ...formState, name: e.target.value })
-							}
-							className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+							value={link.url}
+							readOnly
+							className={`${BASE_INPUT_STYLES} bg-gray-50 text-gray-500 dark:bg-gray-700 dark:text-gray-400 pl-9`}
 						/>
 					</div>
 
-					<div>
-						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-							{chrome.i18n.getMessage('description')}
-						</label>
-						<textarea
-							placeholder={chrome.i18n.getMessage('linkDescriptionPlaceholder')}
-							value={formState.description}
-							onChange={(e) =>
-								setFormState({ ...formState, description: e.target.value })
-							}
-							rows={3}
-							className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-						/>
-					</div>
+					<Input
+						label={`${chrome.i18n.getMessage('name')} *`}
+						placeholder={chrome.i18n.getMessage('linkNamePlaceholder')}
+						value={formState.name}
+						onChange={(e) =>
+							setFormState({ ...formState, name: e.target.value })
+						}
+					/>
+
+					<Textarea
+						label={chrome.i18n.getMessage('description')}
+						placeholder={chrome.i18n.getMessage('linkDescriptionPlaceholder')}
+						value={formState.description}
+						onChange={(e) =>
+							setFormState({ ...formState, description: e.target.value })
+						}
+						rows={3}
+					/>
 
 					<div className="flex items-center">
 						<input
@@ -137,15 +120,14 @@ export function AddLinkView({
 
 					<div>
 						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-							{chrome.i18n.getMessage('collection')}
-							<span className="text-red-500">*</span>
+							{chrome.i18n.getMessage('collection')} *
 						</label>
 						<select
 							value={formState.collectionId}
 							onChange={(e) =>
 								setFormState({ ...formState, collectionId: e.target.value })
 							}
-							className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+							className={BASE_INPUT_STYLES}
 						>
 							<option value="">
 								{chrome.i18n.getMessage('selectCollection')}
@@ -162,25 +144,20 @@ export function AddLinkView({
 					</div>
 
 					<div className="flex justify-end gap-2">
-						<button
-							type="button"
-							onClick={onCancel}
-							className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-						>
+						<Button variant="outline" onClick={onCancel}>
 							{chrome.i18n.getMessage('cancel')}
-						</button>
-						<button
-							type="button"
+						</Button>
+						<Button
 							onClick={handleAddLink}
 							disabled={
 								!formState.collectionId || !formState.name.trim() || loading
 							}
-							className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+							variant="primary"
 						>
 							{loading
 								? chrome.i18n.getMessage('loading')
 								: chrome.i18n.getMessage('addToCollection')}
-						</button>
+						</Button>
 					</div>
 				</div>
 			</div>

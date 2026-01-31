@@ -1,56 +1,57 @@
 {
-  "name": "my-links-extension",
-  "type": "module",
-  "version": "1.0.0-0",
-  "private": true,
-  "scripts": {
-    "dev": "vite --config vite.config.ts",
-    "dev:chrome": "vite --config vite.config.chrome.ts",
-    "dev:firefox": "vite --config vite.config.firefox.ts",
-    "typecheck": "tsc -b",
-    "build": "pnpm run typecheck && pnpm run build:chrome",
-    "build:chrome": "vite build --config vite.config.chrome.ts",
-    "build:firefox": "vite build --config vite.config.firefox.ts",
-    "build:all": "pnpm run typecheck && pnpm run build:chrome && pnpm run build:firefox",
-    "preview": "vite preview",
-    "format": "prettier --write --parser typescript '**/*.{ts,tsx}'",
-    "format:check": "prettier --check --parser typescript '**/*.{ts,tsx}'",
-    "release": "release-it"
-  },
-  "dependencies": {
-    "@tabler/icons-react": "^3.34.1",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
-  },
-  "devDependencies": {
-    "@crxjs/vite-plugin": "^2.0.3",
-    "@types/chrome": "^0.1.1",
-    "@types/node": "^24.0.15",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
-    "@unocss/preset-icons": "^66.5.12",
-    "@unocss/preset-web-fonts": "^66.5.12",
-    "@vitejs/plugin-react": "^4.7.0",
-    "chrome-webstore-upload-cli": "^3.5.0",
-    "prettier": "^3.8.0",
-    "release-it": "^19.2.4",
-    "typescript": "~5.8.3",
-    "unocss": "^66.5.12",
-    "vite": "^7.0.5",
-    "vite-plugin-zip-pack": "^1.2.4",
-    "web-ext": "^9.2.0"
-  },
-  "prettier": {
-    "trailingComma": "es5",
-    "semi": true,
-    "singleQuote": true,
-    "useTabs": true,
-    "quoteProps": "as-needed",
-    "bracketSpacing": true,
-    "arrowParens": "always",
-    "printWidth": 80
-  },
-  "volta": {
-    "node": "24.13.0"
-  }
+	"name": "my-links-extension",
+	"type": "module",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"dev": "vite --config vite.config.ts",
+		"dev:chrome": "vite --config vite.config.chrome.ts",
+		"dev:firefox": "vite --config vite.config.firefox.ts",
+		"typecheck": "tsc -b",
+		"build": "pnpm run typecheck && pnpm run build:chrome",
+		"build:chrome": "vite build --config vite.config.chrome.ts",
+		"build:firefox": "vite build --config vite.config.firefox.ts",
+		"build:all": "pnpm run typecheck && pnpm run build:chrome && pnpm run build:firefox",
+		"preview": "vite preview",
+		"format": "prettier --write --parser typescript '**/*.{ts,tsx}'",
+		"format:check": "prettier --check --parser typescript '**/*.{ts,tsx}'",
+		"release": "release-it"
+	},
+	"dependencies": {
+		"@minimalstuff/ui": "^1.0.0",
+		"@tabler/icons-react": "^3.34.1",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0"
+	},
+	"devDependencies": {
+		"@crxjs/vite-plugin": "^2.0.3",
+		"@types/chrome": "^0.1.1",
+		"@types/node": "^24.0.15",
+		"@types/react": "^19.1.8",
+		"@types/react-dom": "^19.1.6",
+		"@unocss/preset-icons": "^66.5.12",
+		"@unocss/preset-web-fonts": "^66.5.12",
+		"@vitejs/plugin-react": "^4.7.0",
+		"chrome-webstore-upload-cli": "^3.5.0",
+		"prettier": "^3.8.0",
+		"release-it": "^19.2.4",
+		"typescript": "~5.8.3",
+		"unocss": "^66.5.12",
+		"vite": "^7.0.5",
+		"vite-plugin-zip-pack": "^1.2.4",
+		"web-ext": "^9.2.0"
+	},
+	"prettier": {
+		"trailingComma": "es5",
+		"semi": true,
+		"singleQuote": true,
+		"useTabs": true,
+		"quoteProps": "as-needed",
+		"bracketSpacing": true,
+		"arrowParens": "always",
+		"printWidth": 80
+	},
+	"volta": {
+		"node": "24.13.0"
+	}
 }

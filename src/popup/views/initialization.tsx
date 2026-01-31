@@ -1,3 +1,4 @@
+import { Button } from '@minimalstuff/ui';
 import { IconBookmark, IconCheck, IconInfoCircle } from '@tabler/icons-react';
 
 interface InitializationViewProps {
@@ -50,14 +51,16 @@ export function InitializationView({ onInitialize }: InitializationViewProps) {
 						</div>
 					</div>
 
-					<button
+					<Button
 						type="button"
+						variant="primary"
+						fullWidth
 						onClick={onInitialize}
-						className="flex w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+						className="gap-2"
 					>
 						<IconBookmark size={16} />
 						{chrome.i18n.getMessage('initialize')}
-					</button>
+					</Button>
 				</div>
 			</div>
 		</div>

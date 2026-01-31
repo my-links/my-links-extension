@@ -4,12 +4,11 @@ import {
 	MyLinksCollection,
 	UpdateCollectionRequest,
 } from '@/types';
+import { Button, IconButton } from '@minimalstuff/ui';
 import {
-	IconDotsVertical,
 	IconEdit,
 	IconExternalLink,
 	IconPlus,
-	IconRefresh,
 	IconTrash,
 } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -78,24 +77,27 @@ export function CollectionsView({
 					{chrome.i18n.getMessage('collections')}
 				</h2>
 				<div className="flex items-center gap-2">
-					<button
-						type="button"
+					<IconButton
+						icon="i-tabler-refresh"
+						aria-label={chrome.i18n.getMessage('refresh')}
+						variant="outline"
+						size="sm"
 						onClick={handleRefresh}
 						disabled={loading}
-						className="rounded-md border border-gray-300 bg-white p-2 text-gray-700 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-					>
-						<IconRefresh size={16} className={loading ? 'animate-spin' : ''} />
-					</button>
-					<button
+						className={loading ? 'animate-spin' : ''}
+					/>
+					<Button
 						type="button"
+						variant="outline"
+						size="sm"
 						onClick={() =>
 							modals.openCreateCollectionModal(handleCreateCollection)
 						}
-						className="flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+						className="gap-1"
 					>
 						<IconPlus size={14} />
 						{chrome.i18n.getMessage('createCollection')}
-					</button>
+					</Button>
 				</div>
 			</div>
 
@@ -131,8 +133,11 @@ export function CollectionsView({
 										)}
 									</div>
 									<div className="relative ml-2">
-										<button
-											type="button"
+										<IconButton
+											icon="i-tabler-dots-vertical"
+											aria-label={chrome.i18n.getMessage('menu')}
+											variant="outline"
+											size="sm"
 											onClick={() =>
 												setOpenMenuId(
 													openMenuId === String(collection.id)
@@ -140,10 +145,7 @@ export function CollectionsView({
 														: String(collection.id)
 												)
 											}
-											className="rounded-md border border-gray-300 bg-white p-1.5 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-										>
-											<IconDotsVertical size={14} />
-										</button>
+										/>
 										{openMenuId === String(collection.id) && (
 											<>
 												<div
@@ -151,8 +153,10 @@ export function CollectionsView({
 													onClick={() => setOpenMenuId(null)}
 												/>
 												<div className="absolute right-0 top-full z-20 mt-1 w-48 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
-													<button
+													<Button
 														type="button"
+														variant="ghost"
+														className="flex w-full justify-start gap-2 rounded-t-md px-4 py-2 text-left text-sm"
 														onClick={() => {
 															modals.openEditCollectionModal(
 																collection,
@@ -160,13 +164,14 @@ export function CollectionsView({
 															);
 															setOpenMenuId(null);
 														}}
-														className="flex w-full items-center gap-2 rounded-t-md px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
 													>
 														<IconEdit size={14} />
 														{chrome.i18n.getMessage('editCollection')}
-													</button>
-													<button
+													</Button>
+													<Button
 														type="button"
+														variant="ghost"
+														className="flex w-full justify-start gap-2 px-4 py-2 text-left text-sm"
 														onClick={() => {
 															chrome.tabs.create({
 																url: `https://www.mylinks.app/collections/${String(
@@ -175,23 +180,23 @@ export function CollectionsView({
 															});
 															setOpenMenuId(null);
 														}}
-														className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
 													>
 														<IconExternalLink size={14} />
 														{chrome.i18n.getMessage('viewOnMyLinks')}
-													</button>
+													</Button>
 													<div className="border-t border-gray-200 dark:border-gray-700" />
-													<button
+													<Button
 														type="button"
+														variant="ghost"
+														className="flex w-full justify-start gap-2 rounded-b-md px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
 														onClick={() => {
 															handleDeleteCollection(collection);
 															setOpenMenuId(null);
 														}}
-														className="flex w-full items-center gap-2 rounded-b-md px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
 													>
 														<IconTrash size={14} />
 														{chrome.i18n.getMessage('deleteCollection')}
-													</button>
+													</Button>
 												</div>
 											</>
 										)}

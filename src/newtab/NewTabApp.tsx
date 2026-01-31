@@ -1,3 +1,4 @@
+import { Button } from '@minimalstuff/ui';
 import { IconAlertCircle, IconRefresh } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
@@ -21,7 +22,7 @@ export function NewTabApp() {
 				setMylinksUrl(response.data.mylinksUrl);
 			}
 		} catch (err) {
-			console.error('Failed to load settings:', err);
+			console.error('Failed to load settings', err);
 			setError('Failed to load settings');
 		} finally {
 			setLoading(false);
@@ -69,14 +70,14 @@ export function NewTabApp() {
 							<p className="mb-3 text-sm text-red-700 dark:text-red-300">
 								{error}
 							</p>
-							<button
-								type="button"
+							<Button
+								variant="danger"
 								onClick={handleRefresh}
-								className="flex items-center gap-2 rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
+								className="gap-2"
 							>
 								<IconRefresh size={16} />
 								{chrome.i18n.getMessage('retry')}
-							</button>
+							</Button>
 						</div>
 					</div>
 				</div>

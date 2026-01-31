@@ -1,5 +1,6 @@
 import { ThemeToggle } from '@/components';
 import { useModalContext } from '@/components/modals';
+import { Button } from '@minimalstuff/ui';
 import {
 	IconExternalLink,
 	IconKey,
@@ -145,27 +146,26 @@ export function SettingsView({
 						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
 							{chrome.i18n.getMessage('mylinksUrl')}
 						</label>
-						<div className="relative">
-							<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-								<IconWorld className="h-4 w-4 text-gray-400" />
+						<div className="flex rounded-md border border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent">
+							<div className="relative flex flex-1 items-center">
+								<IconWorld className="pointer-events-none absolute left-3 h-4 w-4 text-gray-400" />
+								<input
+									type="text"
+									placeholder="https://www.mylinks.app"
+									value={mylinksUrl}
+									onChange={(e) => setMylinksUrl(e.target.value)}
+									className="min-w-0 flex-1 border-0 bg-transparent py-2 pl-9 pr-2 text-sm text-gray-900 placeholder-gray-500 outline-none focus:ring-0 dark:text-gray-100 dark:placeholder-gray-400"
+								/>
 							</div>
-							<input
-								type="text"
-								placeholder="https://www.mylinks.app"
-								value={mylinksUrl}
-								onChange={(e) => setMylinksUrl(e.target.value)}
-								className="w-full rounded-md border border-gray-300 bg-white pl-9 pr-20 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-							/>
-							<div className="absolute inset-y-0 right-0 flex items-center pr-1">
-								<button
-									type="button"
-									onClick={openMyLinks}
-									className="flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-								>
-									<IconExternalLink size={14} />
-									{chrome.i18n.getMessage('open')}
-								</button>
-							</div>
+							<Button
+								type="button"
+								variant="subtle"
+								size="sm"
+								onClick={openMyLinks}
+							>
+								<IconExternalLink size={14} />
+								{chrome.i18n.getMessage('open')}
+							</Button>
 						</div>
 					</div>
 
@@ -173,50 +173,50 @@ export function SettingsView({
 						<label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
 							{chrome.i18n.getMessage('apiKey')}
 						</label>
-						<div className="relative">
-							<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-								<IconKey className="h-4 w-4 text-gray-400" />
+						<div className="flex rounded-md border border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent">
+							<div className="relative flex flex-1 items-center">
+								<IconKey className="pointer-events-none absolute left-3 h-4 w-4 text-gray-400" />
+								<input
+									type="password"
+									placeholder={chrome.i18n.getMessage('apiKeyPlaceholder')}
+									value={apiKey}
+									onChange={(e) => setApiKey(e.target.value)}
+									className="min-w-0 flex-1 border-0 bg-transparent py-2 pl-9 pr-2 text-sm text-gray-900 placeholder-gray-500 outline-none focus:ring-0 dark:text-gray-100 dark:placeholder-gray-400"
+								/>
 							</div>
-							<input
-								type="password"
-								placeholder={chrome.i18n.getMessage('apiKeyPlaceholder')}
-								value={apiKey}
-								onChange={(e) => setApiKey(e.target.value)}
-								className="w-full rounded-md border border-gray-300 bg-white pl-9 pr-24 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-							/>
-							<div className="absolute inset-y-0 right-0 flex items-center pr-1">
-								<button
-									type="button"
-									onClick={openApiKeyPage}
-									className="flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-								>
-									<IconExternalLink size={14} />
-									{chrome.i18n.getMessage('getApiKey')}
-								</button>
-							</div>
+							<Button
+								type="button"
+								variant="subtle"
+								size="sm"
+								onClick={openApiKeyPage}
+							>
+								<IconExternalLink size={14} />
+								{chrome.i18n.getMessage('getApiKey')}
+							</Button>
 						</div>
 					</div>
 
 					<div className="flex items-center justify-between">
-						<button
+						<Button
 							type="button"
+							variant="danger"
 							onClick={handleReset}
 							disabled={loading}
-							className="flex items-center gap-2 rounded-md border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-50 dark:border-red-600 dark:bg-gray-700 dark:text-red-400 dark:hover:bg-red-900/20"
+							className="gap-2"
 						>
 							<IconTrash size={16} />
 							{chrome.i18n.getMessage('resetExtension')}
-						</button>
-						<button
+						</Button>
+						<Button
 							type="button"
+							variant="primary"
 							onClick={handleSave}
 							disabled={!mylinksUrl || loading}
-							className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 						>
 							{loading
 								? chrome.i18n.getMessage('loading')
 								: chrome.i18n.getMessage('save')}
-						</button>
+						</Button>
 					</div>
 				</div>
 			</div>
