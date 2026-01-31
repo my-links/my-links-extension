@@ -1,10 +1,21 @@
 import { defineManifest } from '@crxjs/vite-plugin';
 import pkg from './package.json';
 
-const firefoxAddonId = process.env.FIREFOX_ADDON_ID;
-const browserSpecificSettings = firefoxAddonId
-	? { browser_specific_settings: { gecko: { id: firefoxAddonId } } }
-	: {};
+const firefoxAddonId = process.env.FIREFOX_ADDON_ID ?? 'my-links@mylinks.app';
+
+const dataCollectionPermissions = {
+	required: ['browsingActivity'],
+	optional: [],
+};
+
+const browserSpecificSettings = {
+	browser_specific_settings: {
+		gecko: {
+			...(firefoxAddonId ? { id: firefoxAddonId } : {}),
+			data_collection_permissions: dataCollectionPermissions,
+		},
+	},
+};
 
 export default defineManifest({
 	manifest_version: 3,
